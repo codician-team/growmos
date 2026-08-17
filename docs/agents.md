@@ -62,6 +62,17 @@ growmos init --agent cursor     # .cursor/rules/growmos.mdc, alwaysApply: true
 growmos init --agent gemini     # GEMINI.md block
 ```
 
+## MCP (any client)
+
+```bash
+growmos integrate mcp        # writes .mcp.json (and .cursor/mcp.json if .cursor/ exists)
+```
+```json
+{"mcpServers": {"growmos": {"command": "growmos", "args": ["mcp"]}}}
+```
+Claude Code also accepts `claude mcp add growmos -- growmos mcp`. Codex: `~/.codex/config.toml`
+(`[mcp_servers.growmos] command = "growmos" args = ["mcp"]`). Gemini: `~/.gemini/settings.json`.
+
 ## Everything at once
 
 ```bash

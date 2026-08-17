@@ -904,7 +904,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.set_defaults(fn=cmd_init)
 
     sp = sub.add_parser("integrate", help="wire growmos into an agent CLI / git hooks / CI")
-    sp.add_argument("target", help="claude|codex|gemini|cursor|grok|generic|file|hooks|ci|all")
+    sp.add_argument("target", help="claude|codex|gemini|cursor|grok|generic|mcp|file|hooks|ci|all")
     sp.add_argument("--file", help="instructions file to append the growmos block to (target=file)")
     sp.set_defaults(fn=cmd_integrate)
 

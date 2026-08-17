@@ -115,14 +115,40 @@ growmos status · growmos context · growmos doctor · growmos eval · growmos s
 | **Any file** | `growmos integrate file --file path/to/instructions.md` | append the protocol block anywhere |
 | **git** | `growmos integrate hooks` → `post-commit`, `post-merge`, `post-checkout` | queue changed docs automatically |
 | **CI** | `growmos integrate ci` → `.github/workflows/growmos.yml` | doctor + eval on every PR |
+| **MCP** | `growmos integrate mcp` → `.mcp.json` (+ `.cursor/mcp.json`) | tools for any MCP client (below) |
 
 `growmos init --agent all` does all of the above. Everything is idempotent (marker blocks, JSON merges).
 
-**MCP** — `growmos mcp` is a zero-dependency MCP stdio server exposing `growmos_context`,
-`growmos_query`, `growmos_remember`, `growmos_link`, `growmos_journal`, `growmos_check`,
-`growmos_next`, `growmos_apply`, `growmos_entity`, `growmos_search`, `growmos_status`,
-`growmos_sample`. Add `{"mcpServers": {"growmos": {"command": "growmos", "args": ["mcp"]}}}`
-to your CLI's MCP config.
+### MCP server (any MCP-capable client)
+
+`growmos mcp` is a zero-dependency MCP stdio server. Register it the same way you register any
+MCP server — `growmos integrate mcp` writes this for you, or paste it yourself:
+
+```json
+{
+  "mcpServers": {
+    "growmos": {
+      "command": "growmos",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+| Client | Where |
+|---|---|
+| Claude Code | `.mcp.json` in the repo (written by `growmos init` / `integrate claude`), or `claude mcp add growmos -- growmos mcp` |
+| Cursor | `.cursor/mcp.json` (written by `integrate cursor` / `integrate mcp`) |
+| Codex CLI | `~/.codex/config.toml`: `[mcp_servers.growmos]` `command = "growmos"` `args = ["mcp"]` |
+| Gemini CLI | `~/.gemini/settings.json` → `mcpServers.growmos` as above |
+| Grok CLI / others | their MCP config, same JSON |
+
+Tools exposed: `growmos_context`, `growmos_query`, `growmos_entity`, `growmos_search`,
+`growmos_remember`, `growmos_link`, `growmos_journal`, `growmos_check`, `growmos_next`,
+`growmos_apply`, `growmos_status`, `growmos_sample`. Once registered, the agent calls them
+directly instead of shelling out — e.g. *"what depends on the Store?"* → `growmos_query`; *"remember
+that Scheduler now uses Kafka"* → `growmos_remember` + `growmos_link`; *"grow the graph"* →
+`growmos_next` / `growmos_apply` in a loop.
 
 ## What lives in `.growmos/` (commit it)
 

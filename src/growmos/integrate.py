@@ -28,7 +28,7 @@ TPL = Path(__file__).parent / "templates" / "integrations"
 START = "<!-- growmos:start"
 END = "<!-- growmos:end -->"
 
-TARGETS = ["claude", "codex", "gemini", "cursor", "grok", "generic", "hooks", "ci", "all"]
+TARGETS = ["claude", "codex", "gemini", "cursor", "grok", "generic", "mcp", "hooks", "ci", "all"]
 
 
 def _block() -> str:
@@ -80,8 +80,8 @@ def _merge_hooks(settings: Dict[str, Any]) -> bool:
     return changed
 
 
-def _merge_mcp(root: Path) -> str:
-    path = root / ".mcp.json"
+def _merge_mcp(root: Path, path: Path = None) -> str:
+    path = path or (root / ".mcp.json")
     data = read_json(path, {}) or {}
     servers = data.setdefault("mcpServers", {})
     if "growmos" in servers:
@@ -126,6 +126,12 @@ def integrate(root: Path, target: str, file: str = "") -> List[str]:
             p.write_text("---\ndescription: growmos living knowledge graph protocol\nalwaysApply: true\n---\n\n" + block,
                          encoding="utf-8")
             out.append(".cursor/rules/growmos.mdc: written")
+            out.append(f".cursor/mcp.json: {_merge_mcp(root, root / '.cursor' / 'mcp.json')} (growmos MCP server)")
+        elif t == "mcp":
+            out.append(f".mcp.json: {_merge_mcp(root)} (Claude Code / Codex / Grok / any MCP client)")
+            if (root / ".cursor").exists():
+                out.append(f".cursor/mcp.json: {_merge_mcp(root, root / '.cursor' / 'mcp.json')}")
+            out.append('  other clients: add {"mcpServers": {"growmos": {"command": "growmos", "args": ["mcp"]}}} to their MCP config')
         elif t == "file":
             if not file:
                 raise ValueError("--file PATH is required for target 'file'")
