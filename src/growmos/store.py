@@ -90,6 +90,8 @@ class Store:
             "chunk_chars": 6000,
             "profile_min_degree": 3,
             "resolve_batch_size": 80,
+            "gold_min": 2,
+            "review_days": 7,
             "provider": {"name": "", "extract_model": "", "reason_model": ""},
         }
         st.schema = {

@@ -14,8 +14,9 @@ memory you read at the start of work and write to as you develop. Zero-config co
    - `growmos link "<A>" "<predicate>" "<B>"`   (short verb phrase predicates: "depends on", "replaces")
    - `growmos journal "<what changed and why>"`
 4. **Feed the organism** — run `growmos next`. It hands you a *task packet* (extraction / resolution /
-   profile) with the exact prompt, the JSON schema, and the `growmos apply …` command. Do the judgment
-   work yourself, write the JSON, apply it. Repeat until `growmos next` says the graph is up to date.
+   profile / gold set / review) with the exact prompt, the JSON shape, and the `growmos apply …` command.
+   Do the judgment work yourself, write the JSON, apply it. Repeat until `growmos next` says the graph is
+   up to date — that loop covers everything, including the evaluation gold set and the periodic node review.
    Never invent facts not in the source; every relation must connect two extracted entities.
 5. **Before claiming facts about the repo in a summary/report** — `growmos check "<claim text>"` grounds
    your claims against edges with provenance (evaluator–optimizer loop).
@@ -23,5 +24,5 @@ memory you read at the start of work and write to as you develop. Zero-config co
 
 Store files are plain JSONL under `.growmos/` — commit them with your code. Do not hand-edit
 `entities.jsonl`/`relations.jsonl` (use the CLI); prompts in `.growmos/prompts/` are yours to tune.
-More: `growmos --help`, docs at https://github.com/codician/growmos.
+More: `growmos --help`, docs at https://github.com/codician-team/growmos.
 <!-- growmos:end -->

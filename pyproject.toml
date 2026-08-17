@@ -22,7 +22,7 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://codician.com"
-Repository = "https://github.com/codician/growmos"
+Repository = "https://github.com/codician-team/growmos"
 
 [project.scripts]
 growmos = "growmos.cli:main"

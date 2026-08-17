@@ -18,7 +18,7 @@ Thanks for helping the organism grow. growmos is MIT-licensed and maintained by
 ## Dev loop
 
 ```bash
-git clone https://github.com/codician/growmos && cd growmos
+git clone https://github.com/codician-team/growmos && cd growmos
 pip install -e .              # or: uv tool install -e .
 python -m unittest discover -s tests -v
 ./examples/apollo/run_demo.sh /tmp/apollo   # rebuild the playbook corpus end-to-end

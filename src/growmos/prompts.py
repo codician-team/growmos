@@ -24,7 +24,7 @@ from .store import Store
 from .util import approx_tokens, truncate
 
 TEMPLATE_DIR = Path(__file__).parent / "templates" / "prompts"
-PROMPT_NAMES = ["extract", "resolve", "summarize", "query", "check"]
+PROMPT_NAMES = ["extract", "resolve", "summarize", "query", "check", "gold", "review"]
 
 
 def install_default_prompts(dest: Path, force: bool = False) -> List[str]:
@@ -120,6 +120,10 @@ def _shape(kind: str, entity_types: Optional[List[str]] = None) -> str:
     if kind == "profile":
         return ('{"summary": "2-3 paragraphs", "key_facts": ["3-5 atomic facts traceable to sources"],\n'
                 ' "time_range": {"start": "YYYY|unknown", "end": "YYYY|ongoing|unknown"}}')
+    if kind == "gold":
+        return '{"entities": [{"name": "…", "type": "…"}], "relations": [{"source": "<name>", "target": "<name>"}]}'
+    if kind == "review":
+        return '{"ok": true, "issues": ["<edge id>: what is wrong"], "fixes": ["growmos link … / growmos remember … you ran or recommend"]}'
     return "{}"
 
 
@@ -305,3 +309,52 @@ def check_packet(store: Store, content: str, hops: int = 2) -> Tuple[str, Dict[s
     prompt = render(load_prompt(store, "check"), graph=triples or "(empty)", content=content)
     meta = {"seeds": seeds, "nodes": len(nodes), "edges": total, "tokens": approx_tokens(prompt)}
     return prompt, meta
+
+
+def gold_packet(store: Store, source_id: str) -> Tuple[str, Dict[str, Any]]:
+    """Ask the agent to produce (or correct) the gold answer for a source — the eval loop's ground truth."""
+    rec = store.sources[source_id]
+    text = store.source_text(source_id)
+    ents = [{"name": m["name"], "type": m["type"]} for m in store.mentions() if m.get("source") == source_id]
+    pairs = [{"source": store.entities[r["source"]]["name"], "target": store.entities[r["target"]]["name"]}
+             for r in store.relations.values() if source_id in r.get("sources", [])
+             and r["source"] in store.entities and r["target"] in store.entities]
+    prompt = render(load_prompt(store, "gold"), source_ref=rec["ref"], text=truncate(text, 20000),
+                    extraction=json.dumps({"entities": ents, "relations": pairs}, ensure_ascii=False, indent=1),
+                    entity_types=", ".join(store.entity_types))
+    stem = Path(rec["ref"]).stem or source_id
+    out_file = f".growmos/cache/gold_{source_id}.json"
+    apply_cmd = f"growmos apply gold {out_file} --source {source_id}"
+    header = _packet_header(f"gold set · {rec['ref']}", apply_cmd, S.GOLD_SCHEMA, out_file, kind="gold")
+    meta = {"source": source_id, "stem": stem, "apply": apply_cmd, "out_file": out_file, "tokens": approx_tokens(prompt)}
+    return header + prompt, meta
+
+
+def review_packet(store: Store, eid: str, max_excerpt_chars: int = 1500) -> Tuple[str, Dict[str, Any]]:
+    """The comprehension check: one node, its edges, and the sources those edges cite."""
+    g = Graph(store)
+    card = g.entity_card(eid)
+    ent = store.entities[eid]
+    sids: List[str] = []
+    for rid in g.out.get(eid, []) + g.inc.get(eid, []):
+        for sid in store.relations[rid].get("sources", []):
+            if sid not in sids:
+                sids.append(sid)
+    for sid in ent.get("sources", []):
+        if sid not in sids:
+            sids.append(sid)
+    excerpts = []
+    for sid in sids[:8]:
+        rec = store.sources.get(sid, {})
+        try:
+            text = store.source_text(sid)
+        except Exception:
+            text = ""
+        body = _excerpt_around(text, ent["name"], max_excerpt_chars) if text else "(note/session source — no text)"
+        excerpts.append(f"[{rec.get('ref', sid)}]\n{body}")
+    prompt = render(load_prompt(store, "review"), card=card, excerpts="\n\n".join(excerpts) or "(none)")
+    out_file = f".growmos/cache/review_{eid.replace('/', '__')}.json"
+    apply_cmd = f"growmos apply review {out_file} --entity \"{eid}\""
+    header = _packet_header(f"review · {ent['name']}", apply_cmd, S.REVIEW_SCHEMA, out_file, kind="review")
+    meta = {"entity": eid, "apply": apply_cmd, "out_file": out_file, "tokens": approx_tokens(prompt)}
+    return header + prompt, meta

@@ -138,6 +138,48 @@ class ApolloFixture(unittest.TestCase):
         self.assertIn("growmos apply extraction", pkt)
         self.assertEqual(meta["chunks"], 1)
 
+    def test_next_hands_out_gold_then_review_then_done(self):
+        import copy
+        tmp2 = Path(tempfile.mkdtemp(prefix="growmos-next-"))
+        shutil.copytree(self.tmp, tmp2 / "r")
+        root = tmp2 / "r"
+        st = Store(root).load()
+        for f in st.p("eval", "gold").glob("*.json"):
+            f.unlink()
+        for eid, deg in Graph(st).hubs(50):
+            if deg >= 3:
+                st.set_profile(eid, {"summary": "s", "key_facts": ["k"], "time_range": {"start": "u", "end": "u"}})
+        st.state["last_sample"] = None
+        st.save()
+        out = run_cli("--root", str(root), "next")
+        self.assertIn("gold set", out)
+        for _ in range(2):
+            meta = json.loads(run_cli("--root", str(root), "next", "--json"))["meta"]
+            run_cli("--root", str(root), "apply", "gold", "-", "--source", meta["source"],
+                    stdin=json.dumps({"entities": [{"name": "Apollo 11", "type": "EVENT"}], "relations": []}))
+        out = run_cli("--root", str(root), "next")
+        self.assertIn("review", out)
+        meta = json.loads(run_cli("--root", str(root), "next", "--json"))["meta"]
+        run_cli("--root", str(root), "apply", "review", "-", "--entity", meta["entity"],
+                stdin=json.dumps({"ok": True, "issues": [], "fixes": []}))
+        out = run_cli("--root", str(root), "next")
+        self.assertIn("up to date", out)
+        checks = {c["item"]: c["status"] for c in doctor(Store(root).load())}
+        self.assertEqual(checks["Gold set"], "ok")
+        self.assertEqual(checks["Human sample"], "ok")
+        shutil.rmtree(tmp2, ignore_errors=True)
+
+    def test_eval_auto_extends_alias_map(self):
+        tmp2 = Path(tempfile.mkdtemp(prefix="growmos-alias-"))
+        shutil.copytree(self.tmp, tmp2 / "r")
+        st = Store(tmp2 / "r").load()
+        (st.p("eval", "aliases.json")).write_text("{}", encoding="utf-8")
+        rep = Evaluator(st).evaluate()
+        amap = read_json(st.p("eval", "aliases.json"))
+        self.assertEqual(amap.get("Neil Alden Armstrong"), "Neil Armstrong")
+        self.assertEqual(rep["unrecognized_canonicals"], [])
+        shutil.rmtree(tmp2, ignore_errors=True)
+
     def test_export_formats(self):
         from growmos.export import EXPORTERS
         for name, fn in EXPORTERS.items():

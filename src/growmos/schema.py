@@ -129,6 +129,31 @@ PROFILE_SCHEMA: Dict[str, Any] = {
     "additionalProperties": False,
 }
 
+GOLD_SCHEMA: Dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "entities": {"type": "array", "items": {"type": "object", "properties": {
+            "name": {"type": "string"}, "type": {"type": "string"}},
+            "required": ["name", "type"], "additionalProperties": False}},
+        "relations": {"type": "array", "items": {"type": "object", "properties": {
+            "source": {"type": "string"}, "target": {"type": "string"}},
+            "required": ["source", "target"], "additionalProperties": False}},
+    },
+    "required": ["entities", "relations"],
+    "additionalProperties": False,
+}
+
+REVIEW_SCHEMA: Dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "ok": {"type": "boolean"},
+        "issues": {"type": "array", "items": {"type": "string"}},
+        "fixes": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": ["ok", "issues", "fixes"],
+    "additionalProperties": False,
+}
+
 ANSWER_SCHEMA: Dict[str, Any] = {
     "type": "object",
     "properties": {

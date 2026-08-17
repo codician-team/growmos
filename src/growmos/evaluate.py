@@ -90,6 +90,29 @@ class Evaluator:
                 "missed_entities": sorted(gold_ents - raw_names)[:10],
                 "extra_entities": sorted(raw_names - gold_ents)[:10],
             })
+        # Auto-extend the scorer alias map: a canonical form whose raw mention matched a gold
+        # name is a scoring artifact, not a resolver bug — record canonical -> gold name.
+        auto_added = {}
+        if unrecognized:
+            amap = read_json(st.p("eval", "aliases.json"), {}) or {}
+            gold_names = {}
+            for gf in self.gold_files():
+                for e in (read_json(gf, {}) or {}).get("entities", []):
+                    if e.get("name"):
+                        gold_names[norm_name(e["name"])] = e["name"]
+            for cname in unrecognized:
+                eid = st.resolve_name(cname)
+                if not eid:
+                    continue
+                for (alias, _t), aeid in st.aliases.items():
+                    if aeid == eid and alias in gold_names and cname not in amap:
+                        amap[cname] = gold_names[alias]
+                        auto_added[cname] = gold_names[alias]
+                        break
+            if auto_added:
+                write_json(st.p("eval", "aliases.json"), amap)
+                self.alias_map = {norm_name(k): v for k, v in amap.items()}
+                return self.evaluate()  # rescore once with the extended map
         report = {"ts": now_iso(), "docs": rows, "unrecognized_canonicals": sorted(unrecognized),
                   "schema_version": st.schema_version}
         write_json(st.p("eval", "last_report.json"), report)
@@ -137,10 +160,12 @@ def doctor(store: Store) -> List[Dict[str, str]]:
         checks.append({"item": name, "status": "ok" if ok else ("warn" if ok is None else "fail"),
                        "detail": detail, "fix": fix})
 
-    gold_n = len(list(st.p("eval", "gold").glob("*.json")))
+    gold_files = list(st.p("eval", "gold").glob("*.json"))
+    gold_n = len(gold_files)
+    reviewers = sorted({str((read_json(f, {}) or {}).get("_reviewed_by", "human")) for f in gold_files})
     add("Gold set", gold_n >= 2 if gold_n else False,
-        f"{gold_n} gold file(s)" if gold_n else "no gold files → prompt changes are blind",
-        "add ≥2 hand-labelled files in .growmos/eval/gold/ (growmos gold-template <source>)")
+        (f"{gold_n} gold file(s), reviewed by: {', '.join(reviewers)}") if gold_n else "no gold files → prompt changes are blind",
+        "growmos next hands out gold packets until gold_min is met (or hand-write .growmos/eval/gold/*.json)")
     amap = read_json(st.p("eval", "aliases.json"), None)
     last = read_json(st.p("eval", "last_report.json"), {}) or {}
     unrec = last.get("unrecognized_canonicals") or []
@@ -175,9 +200,12 @@ def doctor(store: Store) -> List[Dict[str, str]]:
             days = (datetime.now(timezone.utc) - dt).days
         except ValueError:
             days = None
-    add("Human sample", (days is not None and days <= 7) if ls else False,
-        f"last sample {days} day(s) ago" if days is not None else "no one has sampled the graph yet",
-        "growmos sample — read one node's profile and check its edges against the sources")
+    who = "human" if st.state.get("last_sample_entity") is None else ("agent" if any(
+        r.get("kind") == "review" for r in st.state.get("runs", [])[-20:]) else "human")
+    add("Human sample", (days is not None and days <= int(st.config.get("review_days", 7))) if ls else False,
+        f"last review {days} day(s) ago ({who}; ok={st.state.get('last_sample_ok', '?')})" if days is not None
+        else "no one has reviewed a node yet",
+        "growmos next hands out a review packet every review_days (or growmos sample for a human pass)")
     return checks
 
 

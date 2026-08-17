@@ -226,7 +226,36 @@ def _next_packet(st: Store) -> Optional[Dict[str, Any]]:
         if deg >= min_deg and st.profile_is_stale(eid):
             text, meta = summarize_packet(st, eid)
             return {"kind": "profile", "text": text, "meta": meta}
+    # ground truth: keep at least `gold_min` gold files (agent-reviewed; humans may overwrite)
+    from .prompts import gold_packet, review_packet
+    gold_min = int(st.config.get("gold_min", 2))
+    have = {read_json(f, {}).get("source") for f in st.p("eval", "gold").glob("*.json")}
+    if len(have) < gold_min:
+        cands = [r for r in st.sources.values() if r.get("status") == "extracted" and r.get("kind", "file") == "file"
+                 and r["ref"] not in have]
+        cands.sort(key=lambda r: -(r.get("stats") or {}).get("entities", 0))
+        if cands:
+            text, meta = gold_packet(st, cands[0]["id"])
+            return {"kind": "gold", "text": text, "meta": meta}
+    # comprehension check: one node every `review_days`
+    if st.entities and _days_since(st.state.get("last_sample")) is None or \
+       (st.entities and _days_since(st.state.get("last_sample")) >= int(st.config.get("review_days", 7))):
+        eid = g.sample(random.Random(len(st.relations)))
+        if eid:
+            text, meta = review_packet(st, eid)
+            return {"kind": "review", "text": text, "meta": meta}
     return None
+
+
+def _days_since(ts: Optional[str]) -> Optional[int]:
+    if not ts:
+        return None
+    from datetime import datetime, timezone
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return (datetime.now(timezone.utc) - dt).days
 
 
 def _remember_packet(st: Store, etype: str, names: List[str]) -> None:
@@ -317,8 +346,51 @@ def cmd_apply(args: argparse.Namespace) -> int:
               f"{prof['time_range']['start']}→{prof['time_range']['end']})")
         for p in problems:
             print(f"  ! {p}")
+    elif kind == "gold":
+        source = args.source or (payload.get("source") if isinstance(payload, dict) else None)
+        if not source:
+            raise StoreError("--source <src_id> is required")
+        if source not in st.sources:
+            match = [s for s, r in st.sources.items() if r.get("ref") == source]
+            if not match:
+                raise StoreError(f"unknown source '{source}'")
+            source = match[0]
+        ref = st.sources[source]["ref"]
+        ents = [{"name": e["name"], "type": str(e.get("type", "")).upper()} for e in payload.get("entities", [])
+                if isinstance(e, dict) and isinstance(e.get("name"), str) and e["name"].strip()]
+        pairs = [{"source": r["source"], "target": r["target"]} for r in payload.get("relations", [])
+                 if isinstance(r, dict) and isinstance(r.get("source"), str) and isinstance(r.get("target"), str)]
+        out = st.p("eval", "gold", Path(ref).stem + ".json")
+        write_json(out, {"source": ref, "entities": ents, "relations": pairs,
+                         "_reviewed_by": args.reviewer or "agent", "_ts": now_iso()})
+        st.record_run("gold", {"source": source, "reviewer": args.reviewer or "agent"})
+        st.save()
+        print(f"✓ gold set written for {ref}: {len(ents)} entities, {len(pairs)} relation pairs "
+              f"(reviewed by {args.reviewer or 'agent'}; humans may edit {out.relative_to(st.root)})")
+    elif kind == "review":
+        eid = args.entity or (payload.get("entity") if isinstance(payload, dict) else None)
+        if not eid or eid not in st.entities:
+            r = st.resolve_name(eid or "")
+            if not r:
+                raise StoreError(f"unknown entity '{eid}'")
+            eid = r
+        ok = bool(payload.get("ok"))
+        issues = [i for i in payload.get("issues", []) if isinstance(i, str)]
+        fixes = [f for f in payload.get("fixes", []) if isinstance(f, str)]
+        st.state["last_sample"] = now_iso()
+        st.state["last_sample_entity"] = eid
+        st.state["last_sample_ok"] = ok
+        st.record_run("review", {"entity": eid, "ok": ok, "issues": len(issues), "reviewer": args.reviewer or "agent"})
+        note = f"Review of {st.entities[eid]['name']} ({eid}): {'ok' if ok else 'issues found'}."
+        if issues:
+            note += "\n" + "\n".join(f"- {i}" for i in issues)
+        if fixes:
+            note += "\nFixes:\n" + "\n".join(f"- {f}" for f in fixes)
+        st.journal(note, author=args.reviewer or "agent-review")
+        st.save()
+        print(f"✓ review recorded for {st.entities[eid]['name']}: {'ok' if ok else f'{len(issues)} issue(s)'}")
     else:
-        raise StoreError("kind must be extraction | resolution | profile")
+        raise StoreError("kind must be extraction | resolution | profile | gold | review")
     return 0
 
 
@@ -679,6 +751,33 @@ def cmd_ingest(args: argparse.Namespace) -> int:
                 st.set_profile(eid, prof)
                 st.save()
                 print(f"profiled {st.entities[eid]['name']}")
+        # gold + review, so the loop is complete without a human
+        from .prompts import gold_packet, review_packet
+        gold_min = int(st.config.get("gold_min", 2))
+        have = {read_json(f, {}).get("source") for f in st.p("eval", "gold").glob("*.json")}
+        cands = [r for r in st.sources.values() if r.get("status") == "extracted" and r.get("kind", "file") == "file"
+                 and r["ref"] not in have]
+        cands.sort(key=lambda r: -(r.get("stats") or {}).get("entities", 0))
+        for rec in cands[: max(0, gold_min - len(have))]:
+            pkt, meta = gold_packet(st, rec["id"])
+            data = call_structured(pkt.split("--- prompt ---\n", 1)[-1], S.GOLD_SCHEMA, stage="reason", config=st.config)
+            write_json(st.p("eval", "gold", Path(rec["ref"]).stem + ".json"),
+                       {"source": rec["ref"], "entities": data.get("entities", []), "relations": data.get("relations", []),
+                        "_reviewed_by": "agent (headless)", "_ts": now_iso()})
+            print(f"gold written for {rec['ref']}")
+        d = _days_since(st.state.get("last_sample"))
+        if st.entities and (d is None or d >= int(st.config.get("review_days", 7))):
+            eid = g.sample(random.Random(len(st.relations)))
+            pkt, meta = review_packet(st, eid)
+            data = call_structured(pkt.split("--- prompt ---\n", 1)[-1], S.REVIEW_SCHEMA, stage="reason", config=st.config)
+            st.state["last_sample"] = now_iso()
+            st.state["last_sample_entity"] = eid
+            st.state["last_sample_ok"] = bool(data.get("ok"))
+            st.journal(f"Headless review of {st.entities[eid]['name']}: {'ok' if data.get('ok') else 'issues'}\n"
+                       + "\n".join(f"- {i}" for i in data.get("issues", [])), author="agent-review")
+            print(f"reviewed {st.entities[eid]['name']}: {'ok' if data.get('ok') else 'issues found'}")
+        from .evaluate import Evaluator
+        Evaluator(st).evaluate()
     except ProviderError as e:
         st.save()
         print(f"provider error: {e}", file=sys.stderr)
@@ -702,7 +801,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="growmos",
         description="growmos — a living knowledge graph that grows with your repo (Codician, MIT).",
-        epilog="Agent loop: growmos context → work → growmos remember/link/journal → growmos next → apply. Docs: https://github.com/codician/growmos",
+        epilog="Agent loop: growmos context → work → growmos remember/link/journal → growmos next → apply. Docs: https://github.com/codician-team/growmos",
     )
     p.add_argument("--root", help="repository root (default: auto-detect via .growmos/ or .git/)")
     p.add_argument("--version", action="version", version=f"growmos {__version__}")
@@ -744,13 +843,14 @@ def build_parser() -> argparse.ArgumentParser:
     sp.set_defaults(fn=cmd_next)
 
     sp = sub.add_parser("apply", help="ingest a completed packet's JSON")
-    sp.add_argument("kind", choices=["extraction", "resolution", "profile"])
+    sp.add_argument("kind", choices=["extraction", "resolution", "profile", "gold", "review"])
     sp.add_argument("file", help="JSON file or - for stdin")
     sp.add_argument("--source", help="source id/ref (extraction)")
     sp.add_argument("--chunk", type=int, help="chunk index (extraction)")
     sp.add_argument("--partial", action="store_true", help="more chunks follow; keep source pending")
     sp.add_argument("--type", help="entity type (resolution)")
-    sp.add_argument("--entity", help="entity id or name (profile)")
+    sp.add_argument("--entity", help="entity id or name (profile/review)")
+    sp.add_argument("--reviewer", help="who reviewed (gold/review): agent (default) or human")
     sp.set_defaults(fn=cmd_apply)
 
     sp = sub.add_parser("extract", help="print the extraction packet for a source")

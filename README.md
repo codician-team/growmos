@@ -41,9 +41,12 @@ growmos makes that a **living organism inside your repo**:
   clusters provisional entities using descriptions ("Edwin Aldrin" → "Buzz Aldrin").
 - **It answers with citations.** `growmos query` serializes the k-hop subgraph around a
   question; the answer must cite edge ids; `growmos check` fact-checks claims against edges.
-- **It measures itself.** Gold sets + `growmos eval` (P/R/F1, raw and resolved), a 10-item
-  `growmos doctor` readiness checklist, health signals (components, density, compression
-  ratio), and `growmos sample` for the daily human comprehension check.
+- **It measures itself — with no manual step.** `growmos next` also hands out *gold-set* packets
+  (the agent writes the reference answer from the source document) and periodic *review*
+  packets (verify one node's edges against its sources), so `growmos eval` (P/R/F1, raw and
+  resolved), the 10-item `growmos doctor` checklist and the health signals (components, density,
+  compression) all stay green on autopilot. Every gold file records who reviewed it
+  (`agent` / `human`) — humans can overrule at any time, but never have to.
 - **It is agent-native.** No API key needed: the CLI does the deterministic work, and hands the
   *judgment* work (extraction, resolution, summarization) to whatever agent you already run as
   a **task packet** — prompt + JSON shape + the exact `growmos apply …` command. Optional
@@ -75,7 +78,7 @@ Manually, the loop is:
 growmos next                                 # packet: prompt + shape + apply command
 #   … agent produces the JSON …
 growmos apply extraction out.json --source src_ab12 --chunk 0
-growmos next                                 # → resolution packet, then profile packets, then "up to date"
+growmos next                                 # → resolution → profiles → gold set → review → "up to date"
 growmos query "what depends on the Store and who decided that?"
 growmos remember "Scheduler" --type COMPONENT --desc "Schedules jobs; depends on Store."
 growmos link "Scheduler" "depends on" "Store"
