@@ -1,5 +1,13 @@
 # growmos
 
+<p align="center">
+  <a href="https://pypi.org/project/growmos/"><img alt="PyPI" src="https://img.shields.io/pypi/v/growmos?color=7dd3fc&label=pypi"></a>
+  <a href="https://github.com/codician-team/growmos/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/codician-team/growmos/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Python" src="https://img.shields.io/pypi/pyversions/growmos?color=86efac">
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-fcd34d"></a>
+  <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-c4b5fd">
+</p>
+
 **A living knowledge graph that grows with your repo.**
 Shared, provenance-carrying memory for humans and AI agents — plug & play with Claude Code, Codex, Grok, Cursor, Gemini, or any MCP-capable CLI. Zero dependencies. MIT.
 
