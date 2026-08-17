@@ -1,0 +1,16 @@
+{
+  "entity": "component/evaluation-harness",
+  "key_facts": [
+    "Gold packets are agent-written by default with _reviewed_by recorded (docs/evaluation.md)",
+    "Scorer alias map is extended automatically when canonical forms differ from gold names (docs/evaluation.md)",
+    "Review packets every review_days verify one node against its sources (docs/evaluation.md)",
+    "growmos doctor implements the ten-item readiness checklist (README.md)"
+  ],
+  "sources_hash": "a65eadcda48f",
+  "summary": "The evaluation harness keeps the graph honest without a human: growmos next hands out gold-set packets until gold_min files exist and a review packet every review_days; growmos eval scores raw and resolved entities and relation pairs against the gold set and auto-extends the scorer alias map; growmos doctor prints the playbook's ten-item readiness checklist and growmos sample supports a human pass.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:05:30Z"
+}

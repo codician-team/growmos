@@ -1,0 +1,16 @@
+{
+  "entity": "feature/headless-mode",
+  "key_facts": [
+    "growmos ingest runs the full loop via an API key (docs/headless.md)",
+    "Providers: Anthropic, OpenAI-compatible, xAI via env vars (docs/headless.md)",
+    "Fast model for extraction, reasoning model for judgment (docs/headless.md)",
+    "Bounded by max_docs_per_run (docs/configuration.md)"
+  ],
+  "sources_hash": "a2d7b76a1906",
+  "summary": "Headless mode lets growmos run its whole loop without an agent at the keyboard: growmos ingest calls an LLM API directly for extraction, resolution, profiles, gold and review, and growmos query --auto answers questions. It is stdlib-only and provider-neutral (Anthropic, OpenAI-compatible, xAI, any base URL) and follows the playbook's model split — a fast model for extraction and a reasoning model for judgment. The extraction cap bounds unattended cost.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:05:30Z"
+}

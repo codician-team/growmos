@@ -1,0 +1,16 @@
+{
+  "entity": "concept/agent-protocol",
+  "key_facts": [
+    "Six steps from context to journal (docs/agents.md)",
+    "Agents run the packet loop without being asked when work is pending (docs/agents.md)",
+    "Claude Code hooks enforce it automatically (README.md)",
+    "Same protocol exposed via the MCP server tools (docs/agents.md)"
+  ],
+  "sources_hash": "990b711a2180",
+  "summary": "The agent protocol is the six-step loop every integrated CLI follows: read the brief at session start and run the packet loop unasked if work is pending; query the graph for cross-cutting questions and cite edge ids; write durable knowledge back with remember, link and journal; grow the graph via growmos next → apply until it says up to date; fact-check claims with growmos check; journal at session end.\n\nIt lives in the AGENTS.md / CLAUDE.md block, the Claude skill and Cursor rules, and is exposed as MCP tools; in Claude Code the SessionStart and Stop hooks enforce it automatically.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:05:30Z"
+}

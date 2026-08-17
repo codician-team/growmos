@@ -1,0 +1,16 @@
+{
+  "entity": "component/growmos-store",
+  "key_facts": [
+    "Plain, deterministic JSONL tables committed with the code (docs/file-format.md)",
+    "config.json carries include/exclude globs and caps such as max_docs_per_run (docs/configuration.md)",
+    "relations carry sources, confidence and optional when ranges (docs/file-format.md)",
+    "Implemented by GraphStore (store.py) (session notes)"
+  ],
+  "sources_hash": "12feb338fb96",
+  "summary": "The .growmos store is the plain-JSONL heart of growmos: sources (content-hashed, with status), append-only mentions for provenance, canonical entities, the alias map, relations with corroboration counts, hub profiles keyed to a source-set hash, versioned schema, config and the loop's state file. Everything is deterministic and committed with the code.\n\nIt is implemented by GraphStore (store.py) and edited through the CLI (growmos config, remember, link, apply); nothing is hand-edited so provenance stays intact.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:05:30Z"
+}

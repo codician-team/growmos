@@ -1,0 +1,16 @@
+{
+  "entity": "component/graphstore-store-py",
+  "key_facts": [
+    "Implements load/save of the deterministic JSONL store (session notes)",
+    "Applies extraction and resolution packets with validation and provenance (session notes)",
+    "Provides remember/link/journal write path (session notes)",
+    "Depended on by prompts.py and graph.py (session notes)"
+  ],
+  "sources_hash": "30696df0d299",
+  "summary": "GraphStore (store.py) is the Python module behind the .growmos store: it loads and saves the JSONL tables deterministically, registers content-hashed sources, applies extraction (validating, recording mentions, resolving names by exact match, creating provisional entities, adding edges with provenance), applies resolution (merging entities, rewriting edges, renaming canonicals), and implements the direct write path — remember, link, journal. The packet builder and the graph engine both depend on it.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:05:54Z"
+}

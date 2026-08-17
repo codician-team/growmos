@@ -1,17 +1,16 @@
 {
   "entity": "concept/living-knowledge-graph-methodology",
   "key_facts": [
-    "Four stages: extraction, resolution, assembly, querying (METHODOLOGY.md)",
-    "Unmatched names become provisional single-element clusters — nothing is silently lost (METHODOLOGY.md)",
-    "The write path (remember, link, journal) records agent knowledge with session provenance (METHODOLOGY.md)",
-    "The evaluation loop and the ten-item readiness checklist provide homeostasis (METHODOLOGY.md)",
-    "Serves as shared memory in orchestrator–workers and grounding layer in evaluator–optimizer patterns (METHODOLOGY.md)"
+    "Four stages plus write path and evaluation loop (METHODOLOGY.md)",
+    "Provisional single-element clusters mean nothing is silently lost (METHODOLOGY.md)",
+    "Shared memory for orchestrator–workers; grounding layer for evaluator–optimizer (METHODOLOGY.md)",
+    "Implemented by growmos (README.md)"
   ],
   "sources_hash": "f77f8bc4e015",
-  "summary": "The Living Knowledge Graph methodology is the tool-agnostic method growmos implements: a repository knowledge graph that eats new material, grows by accretion, resolves its own surface forms, answers with edge citations, measures its health and never forgets. It synthesizes the Anthropic playbook's four stages and agent patterns and adds what a living graph in a developing repository needs.\n\nIts stages are extraction (fast model, central entities with grounded descriptions), resolution (reasoning model clustering provisional entities after cheap blocking), deterministic assembly with diagnostics and hub profiles, and grounded querying over k-hop subgraphs. The write path (remember/link/journal) lets agents record durable knowledge with session provenance while developing, and the evaluation loop plus the ten-item readiness checklist keep it honest. In agent architectures the graph acts as shared memory for orchestrator–workers and as the grounding layer for evaluator–optimizer loops.",
+  "summary": "The Living Knowledge Graph methodology is the tool-agnostic method growmos implements: a repository graph that eats new material, grows by accretion, resolves its own surface forms, answers with citations, measures its health and never forgets. It synthesizes the Anthropic playbook's four stages and agent patterns and adds the write path (remember, link, journal), provisional entities, incremental everything, and an evaluation loop with a ten-item readiness checklist. In agent architectures it is shared memory for orchestrator–workers and the grounding layer for evaluator–optimizer loops.",
   "time_range": {
     "end": "ongoing",
     "start": "2026"
   },
-  "ts": "2026-08-17T11:51:11Z"
+  "ts": "2026-08-17T17:05:45Z"
 }

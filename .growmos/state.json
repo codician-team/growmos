@@ -1,16 +1,16 @@
 {
   "counters": {
-    "extractions": 7,
-    "profiles": 2,
+    "extractions": 16,
+    "profiles": 9,
     "queries": 0,
-    "resolutions": 9
+    "resolutions": 14
   },
   "created": "2026-08-17T11:49:36Z",
   "last_eval": {
     "docs": 2,
     "ts": "2026-08-17T11:51:25Z"
   },
-  "last_run": "2026-08-17T12:27:04Z",
+  "last_run": "2026-08-17T17:05:54Z",
   "last_sample": "2026-08-17T11:51:11Z",
   "last_sample_entity": "concept/agent-protocol",
   "open_packets": {},
@@ -191,6 +191,144 @@
       "kind": "link",
       "relation": "r_455737c6171f",
       "ts": "2026-08-17T12:27:04Z"
+    },
+    {
+      "entities": 3,
+      "kind": "extraction",
+      "relations": 2,
+      "source": "src_17ed18489a95",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 3,
+      "kind": "extraction",
+      "relations": 2,
+      "source": "src_61a641b17fe0",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 2,
+      "kind": "extraction",
+      "relations": 1,
+      "source": "src_f6ed156e4bf5",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 2,
+      "kind": "extraction",
+      "relations": 1,
+      "source": "src_ffdbe3a1e7ee",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 9,
+      "kind": "extraction",
+      "relations": 8,
+      "source": "src_b33563055168",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 4,
+      "kind": "extraction",
+      "relations": 2,
+      "source": "src_a384388adcb2",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 3,
+      "kind": "extraction",
+      "relations": 2,
+      "source": "src_15e0af4a3dd5",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 2,
+      "kind": "extraction",
+      "relations": 1,
+      "source": "src_3fd317a2cb2b",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "entities": 3,
+      "kind": "extraction",
+      "relations": 2,
+      "source": "src_eca12c0a30e2",
+      "ts": "2026-08-17T17:05:08Z"
+    },
+    {
+      "clusters": 2,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T17:05:30Z",
+      "type": "ORGANIZATION"
+    },
+    {
+      "clusters": 9,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T17:05:30Z",
+      "type": "TOOL"
+    },
+    {
+      "clusters": 16,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T17:05:30Z",
+      "type": "CONCEPT"
+    },
+    {
+      "clusters": 4,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T17:05:30Z",
+      "type": "DECISION"
+    },
+    {
+      "clusters": 3,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T17:05:30Z",
+      "type": "FEATURE"
+    },
+    {
+      "entity": "component/growmos-store",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:30Z"
+    },
+    {
+      "entity": "concept/agent-protocol",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:30Z"
+    },
+    {
+      "entity": "feature/headless-mode",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:30Z"
+    },
+    {
+      "entity": "component/evaluation-harness",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:30Z"
+    },
+    {
+      "entity": "tool/growmos",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:45Z"
+    },
+    {
+      "entity": "concept/living-knowledge-graph-methodology",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:45Z"
+    },
+    {
+      "entity": "component/graphstore-store-py",
+      "kind": "profile",
+      "ts": "2026-08-17T17:05:54Z"
     }
   ]
 }

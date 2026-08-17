@@ -20,6 +20,7 @@
 {"alias": "Evaluation loop", "entity": "concept/evaluation-loop", "type": "CONCEPT"}
 {"alias": "Evaluator-optimizer pattern", "entity": "concept/evaluator-optimizer-pattern", "type": "CONCEPT"}
 {"alias": "Extraction", "entity": "concept/extraction", "type": "CONCEPT"}
+{"alias": "Extraction cap", "entity": "concept/extraction-cap", "type": "CONCEPT"}
 {"alias": "Living Knowledge Graph methodology", "entity": "concept/living-knowledge-graph-methodology", "type": "CONCEPT"}
 {"alias": "Model split", "entity": "concept/model-split", "type": "CONCEPT"}
 {"alias": "Orchestrator-workers pattern", "entity": "concept/orchestrator-workers-pattern", "type": "CONCEPT"}
@@ -29,7 +30,9 @@
 {"alias": "Resolution", "entity": "concept/resolution", "type": "CONCEPT"}
 {"alias": "Task packet", "entity": "concept/task-packet", "type": "CONCEPT"}
 {"alias": "Write path", "entity": "concept/write-path", "type": "CONCEPT"}
+{"alias": "Code of Conduct", "entity": "decision/code-of-conduct", "type": "DECISION"}
 {"alias": "Provenance rule", "entity": "decision/provenance-rule", "type": "DECISION"}
+{"alias": "Security policy", "entity": "decision/security-policy", "type": "DECISION"}
 {"alias": "Zero-dependency rule", "entity": "decision/zero-dependency-rule", "type": "DECISION"}
 {"alias": "Anthropic API", "entity": "dependency/anthropic-api", "type": "DEPENDENCY"}
 {"alias": "OpenAI-compatible API", "entity": "dependency/openai-compatible-api", "type": "DEPENDENCY"}
@@ -38,11 +41,13 @@
 {"alias": "Headless mode", "entity": "feature/headless-mode", "type": "FEATURE"}
 {"alias": "Presets", "entity": "feature/presets", "type": "FEATURE"}
 {"alias": "Codician", "entity": "organization/codician", "type": "ORGANIZATION"}
+{"alias": "MCP Registry", "entity": "organization/mcp-registry", "type": "ORGANIZATION"}
 {"alias": "Claude Code", "entity": "tool/claude-code", "type": "TOOL"}
 {"alias": "Codex CLI", "entity": "tool/codex-cli", "type": "TOOL"}
 {"alias": "Cursor", "entity": "tool/cursor", "type": "TOOL"}
 {"alias": "Gemini CLI", "entity": "tool/gemini-cli", "type": "TOOL"}
 {"alias": "Grok CLI", "entity": "tool/grok-cli", "type": "TOOL"}
 {"alias": "growmos", "entity": "tool/growmos", "type": "TOOL"}
+{"alias": "growmos config", "entity": "tool/growmos-config", "type": "TOOL"}
 {"alias": "growmos eval", "entity": "tool/growmos-eval", "type": "TOOL"}
 {"alias": "growmos sample", "entity": "tool/growmos-sample", "type": "TOOL"}

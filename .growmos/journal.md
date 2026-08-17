@@ -10,3 +10,7 @@ Initial build of growmos from the Anthropic Knowledge Graph Playbook PDF: packag
 ### 2026-08-17T12:27:04Z · agent
 
 Added growmos view: interactive HTML explorer + README demo screenshot; bumped to 0.1.1.
+
+### 2026-08-17T17:05:55Z · claude
+
+Session wrap (2026-08-17): published growmos 0.1.5 to PyPI, public GitHub repo with release, Pages site + live demos, MCP Registry listing as com.codician/growmos (DNS-verified), awesome-mcp-servers PR, launch kit. Graph caught up on all doc edits; profiles refreshed.
