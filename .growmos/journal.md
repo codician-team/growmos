@@ -14,3 +14,7 @@ Added growmos view: interactive HTML explorer + README demo screenshot; bumped t
 ### 2026-08-17T17:05:55Z · claude
 
 Session wrap (2026-08-17): published growmos 0.1.5 to PyPI, public GitHub repo with release, Pages site + live demos, MCP Registry listing as com.codician/growmos (DNS-verified), awesome-mcp-servers PR, launch kit. Graph caught up on all doc edits; profiles refreshed.
+
+### 2026-08-17T17:24:00Z · codician-dev
+
+Repository identity moved to the codician-dev account; releases recreated; graph up to date.
