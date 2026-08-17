@@ -53,8 +53,8 @@ Ids are stable (`<type>/<slug-of-first-seen-name>`); `name` is the canonical dis
 ## config.json
 ```json
 {"preset":"software","include":["README.md","docs/**/*.md",…],"exclude":["node_modules/**",…],
- "max_docs_per_run":25,"max_entities_per_doc":40,"chunk_chars":6000,"profile_min_degree":3,
- "resolve_batch_size":80,"provider":{"name":"","extract_model":"","reason_model":""}}
+ "max_docs_per_run":50,"max_entities_per_doc":40,"chunk_chars":6000,"profile_min_degree":3,
+ "resolve_batch_size":80,"gold_min":2,"review_days":7,"provider":{"name":"","extract_model":"","reason_model":""}}
 ```
 
 ## state.json

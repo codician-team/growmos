@@ -180,6 +180,20 @@ Plain JSONL: diff-able, merge-friendly, greppable, viewable (`growmos view`) and
 (`growmos export --format html|json|dot|mermaid|cypher|sql`). Storage is an infrastructure decision, not a pipeline decision:
 the same schema maps onto Neo4j or three Postgres tables.
 
+## Configuration & big projects
+
+Everything tunable lives in `.growmos/config.json` (`growmos config <key> [value]`). Defaults are
+sized for a normal repo; for a big one, three knobs matter:
+
+- **`max_docs_per_run`** (default 50/day) — a speed bump against runaway *unattended* runs, not a
+  wall. When you or your agent are driving a backfill: `growmos next --force` or
+  `growmos config max_docs_per_run 0`. Agents are told this, so they won't stall on it.
+- **`include` / `exclude`** — which docs are knowledge (READMEs, ADRs, design docs by default;
+  never source code — agents write what code *means* via `remember`/`link`).
+- **`chunk_chars`** (6 000) — packet size for long documents.
+
+Full reference (all keys, monorepos, cost notes): [docs/configuration.md](docs/configuration.md).
+
 ## Presets
 
 `growmos init --preset software|general|research|business` — same prompts, extended entity
@@ -214,6 +228,7 @@ next optimizations for large corpora.
 - [docs/agents.md](docs/agents.md) — per-CLI setup and the agent protocol
 - [docs/file-format.md](docs/file-format.md) — store layout & JSON shapes
 - [docs/evaluation.md](docs/evaluation.md) — gold sets, scoring, prompt tuning loop
+- [docs/configuration.md](docs/configuration.md) — every config key, big projects, monorepos
 - [docs/headless.md](docs/headless.md) — provider mode, cron, CI
 - [examples/apollo](examples/apollo) — the playbook's Apollo corpus rebuilt in one script
 
