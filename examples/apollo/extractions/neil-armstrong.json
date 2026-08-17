@@ -1,0 +1,10 @@
+{"source": "docs/neil-armstrong.md",
+ "entities": [
+  {"name": "Neil Alden Armstrong", "type": "PERSON", "description": "American astronaut (1930–2012), first person to walk on the Moon, commander of Apollo 11 and Gemini 8."},
+  {"name": "Apollo 11", "type": "EVENT", "description": "1969 mission Armstrong commanded."},
+  {"name": "Gemini 8", "type": "EVENT", "description": "1966 mission Armstrong commanded, first docking of two spacecraft."}
+ ],
+ "relations": [
+  {"source": "Neil Alden Armstrong", "predicate": "commanded", "target": "Apollo 11"},
+  {"source": "Neil Alden Armstrong", "predicate": "commanded", "target": "Gemini 8"}
+ ]}

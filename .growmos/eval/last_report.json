@@ -1,0 +1,47 @@
+{
+  "docs": [
+    {
+      "doc": "METHODOLOGY.md",
+      "extra_entities": [],
+      "missed_entities": [],
+      "raw": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      },
+      "relations": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      },
+      "resolved": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      }
+    },
+    {
+      "doc": "README.md",
+      "extra_entities": [],
+      "missed_entities": [],
+      "raw": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      },
+      "relations": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      },
+      "resolved": {
+        "f1": 1.0,
+        "p": 1.0,
+        "r": 1.0
+      }
+    }
+  ],
+  "schema_version": 1,
+  "ts": "2026-08-17T11:51:25Z",
+  "unrecognized_canonicals": []
+}

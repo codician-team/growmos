@@ -1,0 +1,45 @@
+{
+  "chunk_chars": 6000,
+  "exclude": [
+    "node_modules/**",
+    ".git/**",
+    ".growmos/**",
+    "dist/**",
+    "build/**",
+    "vendor/**",
+    "**/CHANGELOG*.md",
+    "**/LICENSE*",
+    "**/*.lock",
+    ".venv/**",
+    "venv/**",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    ".claude/**",
+    ".cursor/**",
+    ".codex/**",
+    ".github/**"
+  ],
+  "include": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "ARCHITECTURE.md",
+    "CHANGELOG.md",
+    "docs/**/*.md",
+    "adr/**/*.md",
+    "docs/adr/**/*.md",
+    "design/**/*.md",
+    "rfcs/**/*.md",
+    "*.md"
+  ],
+  "max_docs_per_run": 25,
+  "max_entities_per_doc": 40,
+  "preset": "software",
+  "profile_min_degree": 3,
+  "provider": {
+    "extract_model": "",
+    "name": "",
+    "reason_model": ""
+  },
+  "resolve_batch_size": 80
+}

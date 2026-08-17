@@ -1,0 +1,24 @@
+{"PERSON": {"clusters": [
+   {"canonical": "Neil Alden Armstrong", "aliases": ["Neil Armstrong", "Neil Alden Armstrong"]},
+   {"canonical": "Buzz Aldrin", "aliases": ["Buzz Aldrin", "Edwin Aldrin"]},
+   {"canonical": "Michael Collins", "aliases": ["Michael Collins"]},
+   {"canonical": "President Kennedy", "aliases": ["President Kennedy"]},
+   {"canonical": "Wernher von Braun", "aliases": ["Wernher von Braun"]}]},
+ "LOCATION": {"clusters": [
+   {"canonical": "Kennedy Space Center", "aliases": ["Kennedy Space Center", "John F. Kennedy Space Center"]},
+   {"canonical": "Moon", "aliases": ["Moon"]},
+   {"canonical": "Marshall Space Flight Center", "aliases": ["Marshall Space Flight Center"]},
+   {"canonical": "Merritt Island", "aliases": ["Merritt Island"]},
+   {"canonical": "Launch Complex 39", "aliases": ["Launch Complex 39"]}]},
+ "EVENT": {"clusters": [
+   {"canonical": "Apollo program", "aliases": ["Apollo program"]},
+   {"canonical": "Apollo 11", "aliases": ["Apollo 11"]},
+   {"canonical": "Apollo 17", "aliases": ["Apollo 17"]},
+   {"canonical": "Gemini 8", "aliases": ["Gemini 8"]},
+   {"canonical": "Gemini 12", "aliases": ["Gemini 12"]}]},
+ "ORGANIZATION": {"clusters": [
+   {"canonical": "NASA", "aliases": ["NASA"]}, {"canonical": "MIT", "aliases": ["MIT"]}]},
+ "ARTIFACT": {"clusters": [
+   {"canonical": "Saturn V", "aliases": ["Saturn V"]},
+   {"canonical": "Vehicle Assembly Building", "aliases": ["Vehicle Assembly Building"]}]}
+}

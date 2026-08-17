@@ -1,0 +1,21 @@
+name: growmos
+# Keeps the living knowledge graph honest on every PR:
+#  - doctor: production-readiness checklist (Appendix D of the playbook)
+#  - eval:   precision/recall against the gold set (fails the job on parse errors only;
+#            F1 thresholds are yours to add once you have a baseline)
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  growmos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install growmos
+      - run: growmos status
+      - run: growmos doctor
+      - run: growmos eval

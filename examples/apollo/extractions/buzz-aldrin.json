@@ -1,0 +1,16 @@
+{"source": "docs/buzz-aldrin.md",
+ "entities": [
+  {"name": "Edwin Aldrin", "type": "PERSON", "description": "American astronaut (born 1930), lunar module pilot of Apollo 11, second person to walk on the Moon."},
+  {"name": "Apollo 11", "type": "EVENT", "description": "Mission on which Aldrin was lunar module pilot."},
+  {"name": "Moon", "type": "LOCATION", "description": "Aldrin walked on it on 20 July 1969."},
+  {"name": "MIT", "type": "ORGANIZATION", "description": "Where Aldrin earned a doctorate in astronautics."},
+  {"name": "Gemini 12", "type": "EVENT", "description": "1966 mission on which Aldrin set a spacewalk record."},
+  {"name": "NASA", "type": "ORGANIZATION", "description": "Aldrin joined it in 1963."}
+ ],
+ "relations": [
+  {"source": "Edwin Aldrin", "predicate": "flew on", "target": "Apollo 11"},
+  {"source": "Edwin Aldrin", "predicate": "walked on", "target": "Moon"},
+  {"source": "Edwin Aldrin", "predicate": "studied at", "target": "MIT"},
+  {"source": "Edwin Aldrin", "predicate": "flew on", "target": "Gemini 12"},
+  {"source": "Edwin Aldrin", "predicate": "joined", "target": "NASA"}
+ ]}

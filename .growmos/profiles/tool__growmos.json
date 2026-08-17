@@ -1,0 +1,17 @@
+{
+  "entity": "tool/growmos",
+  "key_facts": [
+    "Developed by Codician under the MIT license (README.md, CONTRIBUTING.md)",
+    "Implements the Anthropic Knowledge Graph Playbook and the Living Knowledge Graph methodology (README.md, METHODOLOGY.md)",
+    "Hands judgment work to agents as task packets; no API key needed in agent-native mode (README.md, docs/agents.md)",
+    "Integrates with Claude Code, Codex CLI, Grok CLI, Cursor and Gemini CLI, plus git hooks, CI and an MCP server (docs/agents.md)",
+    "Governed by the zero-dependency rule and the provenance rule (CONTRIBUTING.md)"
+  ],
+  "sources_hash": "9a409667a528",
+  "summary": "growmos is a zero-dependency Python CLI plus a plain-JSONL `.growmos/` store that keeps a living, provenance-carrying knowledge graph inside a repository. It is developed and maintained by Codician (codician.com) under the MIT license and implements the Anthropic knowledge-graph playbook's four stages — extraction, resolution, assembly, querying — with an evaluation loop closing the circle.\n\nIt is agent-native: the CLI performs the deterministic work (storage, hashing, blocking, assembly, traversal, diagnostics, scoring) and hands judgment work to whatever agent CLI the user runs as task packets (prompt + JSON shape + apply command). It integrates with Claude Code, Codex CLI, Grok CLI, Cursor and Gemini CLI through instruction-file blocks, a Claude skill and hooks, git hooks, a CI workflow, and a built-in MCP stdio server. Optional headless mode calls Anthropic, OpenAI-compatible or xAI APIs directly for cron and CI runs.\n\nTwo governing decisions shape it: the core stays stdlib-only, and no feature may create an edge without provenance.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T11:51:11Z"
+}

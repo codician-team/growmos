@@ -1,0 +1,116 @@
+{
+  "entities": [
+    {
+      "name": "growmos",
+      "type": "TOOL"
+    },
+    {
+      "name": "Codician",
+      "type": "ORGANIZATION"
+    },
+    {
+      "name": "Anthropic Knowledge Graph Playbook",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Task packet",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Claude Code",
+      "type": "TOOL"
+    },
+    {
+      "name": "Codex CLI",
+      "type": "TOOL"
+    },
+    {
+      "name": "Grok CLI",
+      "type": "TOOL"
+    },
+    {
+      "name": "Cursor",
+      "type": "TOOL"
+    },
+    {
+      "name": "Gemini CLI",
+      "type": "TOOL"
+    },
+    {
+      "name": "MCP server",
+      "type": "COMPONENT"
+    },
+    {
+      "name": ".growmos store",
+      "type": "COMPONENT"
+    },
+    {
+      "name": "Evaluation harness",
+      "type": "COMPONENT"
+    },
+    {
+      "name": "Headless mode",
+      "type": "FEATURE"
+    },
+    {
+      "name": "Presets",
+      "type": "FEATURE"
+    }
+  ],
+  "relations": [
+    {
+      "source": "growmos",
+      "target": "Codex CLI"
+    },
+    {
+      "source": "Presets",
+      "target": "growmos"
+    },
+    {
+      "source": "growmos",
+      "target": "Cursor"
+    },
+    {
+      "source": "growmos",
+      "target": "Anthropic Knowledge Graph Playbook"
+    },
+    {
+      "source": "growmos",
+      "target": "Task packet"
+    },
+    {
+      "source": "growmos",
+      "target": "Gemini CLI"
+    },
+    {
+      "source": "growmos",
+      "target": "Claude Code"
+    },
+    {
+      "source": "growmos",
+      "target": "Grok CLI"
+    },
+    {
+      "source": "Codician",
+      "target": "growmos"
+    },
+    {
+      "source": "Evaluation harness",
+      "target": "growmos"
+    },
+    {
+      "source": ".growmos store",
+      "target": "growmos"
+    },
+    {
+      "source": "Headless mode",
+      "target": "growmos"
+    },
+    {
+      "source": "MCP server",
+      "target": "growmos"
+    }
+  ],
+  "source": "README.md",
+  "_reviewed": "hand-reviewed 2026-08-17: entities central to the doc; peripheral tool names intentionally kept as they are the integration surface"
+}

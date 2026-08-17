@@ -1,0 +1,7 @@
+{"source": "docs/neil-armstrong.md",
+ "entities": [{"name": "Neil Armstrong", "type": "PERSON"}, {"name": "Apollo 11", "type": "EVENT"},
+              {"name": "Gemini 8", "type": "EVENT"}, {"name": "NASA", "type": "ORGANIZATION"},
+              {"name": "X-15", "type": "ARTIFACT"}, {"name": "Purdue University", "type": "ORGANIZATION"},
+              {"name": "Moon", "type": "LOCATION"}],
+ "relations": [{"source": "Neil Armstrong", "target": "Apollo 11"}, {"source": "Neil Armstrong", "target": "Gemini 8"},
+               {"source": "Neil Armstrong", "target": "Purdue University"}]}

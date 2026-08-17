@@ -1,0 +1,14 @@
+{"source": "docs/saturn-v.md",
+ "entities": [
+  {"name": "Saturn V", "type": "ARTIFACT", "description": "NASA super heavy-lift launch vehicle of the Apollo program, flown 1967–1973."},
+  {"name": "NASA", "type": "ORGANIZATION", "description": "Agency that developed the Saturn V."},
+  {"name": "Wernher von Braun", "type": "PERSON", "description": "Directed the design of the Saturn V at Marshall Space Flight Center."},
+  {"name": "Marshall Space Flight Center", "type": "LOCATION", "description": "NASA center where the Saturn V was designed."},
+  {"name": "Kennedy Space Center", "type": "LOCATION", "description": "Launch site of the Saturn V (Launch Complex 39)."}
+ ],
+ "relations": [
+  {"source": "NASA", "predicate": "developed", "target": "Saturn V"},
+  {"source": "Wernher von Braun", "predicate": "designed", "target": "Saturn V"},
+  {"source": "Saturn V", "predicate": "designed at", "target": "Marshall Space Flight Center"},
+  {"source": "Saturn V", "predicate": "launched from", "target": "Kennedy Space Center"}
+ ]}

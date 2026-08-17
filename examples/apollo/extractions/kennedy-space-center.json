@@ -1,0 +1,21 @@
+{"source": "docs/kennedy-space-center.md",
+ "entities": [
+  {"name": "John F. Kennedy Space Center", "type": "LOCATION", "description": "NASA launch complex on Merritt Island, Florida, established 1962, launch site of every crewed Apollo mission."},
+  {"name": "NASA", "type": "ORGANIZATION", "description": "Operates the Kennedy Space Center."},
+  {"name": "Merritt Island", "type": "LOCATION", "description": "Florida island where the center is located."},
+  {"name": "President Kennedy", "type": "PERSON", "description": "The center was named after him in 1963."},
+  {"name": "Launch Complex 39", "type": "LOCATION", "description": "Pads 39A/39B built for the Saturn V; Apollo 11 lifted off from 39A."},
+  {"name": "Saturn V", "type": "ARTIFACT", "description": "Rocket for which Launch Complex 39 was built."},
+  {"name": "Apollo 11", "type": "EVENT", "description": "Lifted off from pad 39A on 16 July 1969."},
+  {"name": "Vehicle Assembly Building", "type": "ARTIFACT", "description": "Building where Saturn V rockets were stacked."}
+ ],
+ "relations": [
+  {"source": "NASA", "predicate": "operates", "target": "John F. Kennedy Space Center"},
+  {"source": "John F. Kennedy Space Center", "predicate": "located on", "target": "Merritt Island"},
+  {"source": "John F. Kennedy Space Center", "predicate": "named after", "target": "President Kennedy"},
+  {"source": "Launch Complex 39", "predicate": "part of", "target": "John F. Kennedy Space Center"},
+  {"source": "Launch Complex 39", "predicate": "built for", "target": "Saturn V"},
+  {"source": "Apollo 11", "predicate": "launched from", "target": "Launch Complex 39"},
+  {"source": "Vehicle Assembly Building", "predicate": "part of", "target": "John F. Kennedy Space Center"},
+  {"source": "Saturn V", "predicate": "stacked in", "target": "Vehicle Assembly Building"}
+ ]}

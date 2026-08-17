@@ -1,0 +1,112 @@
+{
+  "entities": [
+    {
+      "name": "Living Knowledge Graph methodology",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "growmos",
+      "type": "TOOL"
+    },
+    {
+      "name": "Anthropic Knowledge Graph Playbook",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Extraction",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Resolution",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Assembly",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Querying",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Write path",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Provisional entity",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Evaluation loop",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Readiness checklist",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Orchestrator-workers pattern",
+      "type": "CONCEPT"
+    },
+    {
+      "name": "Evaluator-optimizer pattern",
+      "type": "CONCEPT"
+    }
+  ],
+  "relations": [
+    {
+      "source": "Write path",
+      "target": "Living Knowledge Graph methodology"
+    },
+    {
+      "source": "Resolution",
+      "target": "Living Knowledge Graph methodology"
+    },
+    {
+      "source": "Evaluation loop",
+      "target": "Extraction"
+    },
+    {
+      "source": "Living Knowledge Graph methodology",
+      "target": "Anthropic Knowledge Graph Playbook"
+    },
+    {
+      "source": "Extraction",
+      "target": "Provisional entity"
+    },
+    {
+      "source": "Querying",
+      "target": "Living Knowledge Graph methodology"
+    },
+    {
+      "source": "Readiness checklist",
+      "target": "Evaluation loop"
+    },
+    {
+      "source": "Extraction",
+      "target": "Living Knowledge Graph methodology"
+    },
+    {
+      "source": "Living Knowledge Graph methodology",
+      "target": "Orchestrator-workers pattern"
+    },
+    {
+      "source": "Living Knowledge Graph methodology",
+      "target": "Evaluator-optimizer pattern"
+    },
+    {
+      "source": "growmos",
+      "target": "Living Knowledge Graph methodology"
+    },
+    {
+      "source": "Resolution",
+      "target": "Provisional entity"
+    },
+    {
+      "source": "Assembly",
+      "target": "Living Knowledge Graph methodology"
+    }
+  ],
+  "source": "METHODOLOGY.md",
+  "_reviewed": "hand-reviewed 2026-08-17: entities central to the doc; peripheral tool names intentionally kept as they are the integration surface"
+}

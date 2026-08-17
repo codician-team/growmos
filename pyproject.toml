@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "growmos"
+version = "0.1.0"
+description = "A living knowledge graph that grows with your repo — agent-native, zero-dependency, plug & play for Claude Code, Codex, Grok, Cursor and any MCP-capable CLI."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Codician", email = "hello@codician.com" }]
+requires-python = ">=3.9"
+keywords = ["knowledge-graph", "agents", "memory", "claude-code", "codex", "mcp", "llm"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://codician.com"
+Repository = "https://github.com/codician/growmos"
+
+[project.scripts]
+growmos = "growmos.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+growmos = ["templates/**/*", "templates/*"]

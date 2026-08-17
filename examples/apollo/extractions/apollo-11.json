@@ -1,0 +1,17 @@
+{"source": "docs/apollo-11.md",
+ "entities": [
+  {"name": "Apollo 11", "type": "EVENT", "description": "First crewed mission to land on the Moon, July 1969."},
+  {"name": "Neil Armstrong", "type": "PERSON", "description": "Commander of Apollo 11 and first person to walk on the Moon."},
+  {"name": "Buzz Aldrin", "type": "PERSON", "description": "Lunar module pilot of Apollo 11 who walked on the Moon after Armstrong."},
+  {"name": "Michael Collins", "type": "PERSON", "description": "Apollo 11 command module pilot who stayed in lunar orbit."},
+  {"name": "Moon", "type": "LOCATION", "description": "Where Apollo 11 landed on 20 July 1969."},
+  {"name": "Kennedy Space Center", "type": "LOCATION", "description": "Launch site of Apollo 11 (Launch Complex 39A)."}
+ ],
+ "relations": [
+  {"source": "Neil Armstrong", "predicate": "commanded", "target": "Apollo 11"},
+  {"source": "Buzz Aldrin", "predicate": "flew on", "target": "Apollo 11"},
+  {"source": "Michael Collins", "predicate": "flew on", "target": "Apollo 11"},
+  {"source": "Apollo 11", "predicate": "landed on", "target": "Moon"},
+  {"source": "Neil Armstrong", "predicate": "walked on", "target": "Moon"},
+  {"source": "Apollo 11", "predicate": "launched from", "target": "Kennedy Space Center"}
+ ]}

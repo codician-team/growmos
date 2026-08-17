@@ -1,0 +1,9 @@
+{"source": "docs/apollo-11.md",
+ "entities": [{"name": "Apollo 11", "type": "EVENT"}, {"name": "Neil Armstrong", "type": "PERSON"},
+              {"name": "Buzz Aldrin", "type": "PERSON"}, {"name": "Michael Collins", "type": "PERSON"},
+              {"name": "Moon", "type": "LOCATION"}, {"name": "Kennedy Space Center", "type": "LOCATION"},
+              {"name": "Saturn V", "type": "ARTIFACT"}, {"name": "Eagle", "type": "ARTIFACT"},
+              {"name": "Columbia", "type": "ARTIFACT"}, {"name": "President Kennedy", "type": "PERSON"}],
+ "relations": [{"source": "Neil Armstrong", "target": "Apollo 11"}, {"source": "Buzz Aldrin", "target": "Apollo 11"},
+               {"source": "Michael Collins", "target": "Apollo 11"}, {"source": "Apollo 11", "target": "Moon"},
+               {"source": "Apollo 11", "target": "Kennedy Space Center"}, {"source": "Saturn V", "target": "Apollo 11"}]}

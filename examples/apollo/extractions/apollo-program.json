@@ -1,0 +1,20 @@
+{"source": "docs/apollo-program.md",
+ "entities": [
+  {"name": "Apollo program", "type": "EVENT", "description": "United States human spaceflight program run by NASA from 1961 to 1972 that landed astronauts on the Moon."},
+  {"name": "NASA", "type": "ORGANIZATION", "description": "US space agency that ran the Apollo program."},
+  {"name": "President Kennedy", "type": "PERSON", "description": "US president whose 1961 goal of a Moon landing before 1970 the Apollo program was dedicated to."},
+  {"name": "Moon", "type": "LOCATION", "description": "Destination of the Apollo program's crewed landings."},
+  {"name": "Saturn V", "type": "ARTIFACT", "description": "Rocket used by the Apollo program."},
+  {"name": "Kennedy Space Center", "type": "LOCATION", "description": "Florida launch site of the Apollo program."},
+  {"name": "Apollo 11", "type": "EVENT", "description": "July 1969 mission with which the Apollo program achieved its Moon-landing goal."},
+  {"name": "Apollo 17", "type": "EVENT", "description": "Last Apollo lunar mission, flown December 1972."}
+ ],
+ "relations": [
+  {"source": "NASA", "predicate": "ran", "target": "Apollo program"},
+  {"source": "Apollo program", "predicate": "dedicated to goal of", "target": "President Kennedy"},
+  {"source": "Apollo program", "predicate": "landed on", "target": "Moon"},
+  {"source": "Apollo program", "predicate": "used", "target": "Saturn V"},
+  {"source": "Apollo program", "predicate": "launched from", "target": "Kennedy Space Center"},
+  {"source": "Apollo 11", "predicate": "part of", "target": "Apollo program"},
+  {"source": "Apollo 17", "predicate": "part of", "target": "Apollo program"}
+ ]}

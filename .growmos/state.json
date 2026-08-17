@@ -1,0 +1,186 @@
+{
+  "counters": {
+    "extractions": 7,
+    "profiles": 2,
+    "queries": 0,
+    "resolutions": 9
+  },
+  "created": "2026-08-17T11:49:36Z",
+  "last_eval": {
+    "docs": 2,
+    "ts": "2026-08-17T11:51:25Z"
+  },
+  "last_run": "2026-08-17T11:51:11Z",
+  "last_sample": "2026-08-17T11:51:11Z",
+  "last_sample_entity": "concept/agent-protocol",
+  "open_packets": {},
+  "pending_resummarize": [],
+  "runs": [
+    {
+      "entities": 14,
+      "kind": "extraction",
+      "relations": 13,
+      "source": "src_b33563055168",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 13,
+      "kind": "extraction",
+      "relations": 13,
+      "source": "src_5dd15b5b20d6",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 9,
+      "kind": "extraction",
+      "relations": 8,
+      "source": "src_a384388adcb2",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 7,
+      "kind": "extraction",
+      "relations": 6,
+      "source": "src_3fd317a2cb2b",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 5,
+      "kind": "extraction",
+      "relations": 5,
+      "source": "src_15e0af4a3dd5",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 5,
+      "kind": "extraction",
+      "relations": 4,
+      "source": "src_644a9dc71c36",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "entities": 4,
+      "kind": "extraction",
+      "relations": 3,
+      "source": "src_eca12c0a30e2",
+      "ts": "2026-08-17T11:50:35Z"
+    },
+    {
+      "clusters": 1,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "ORGANIZATION"
+    },
+    {
+      "clusters": 8,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "TOOL"
+    },
+    {
+      "clusters": 15,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "CONCEPT"
+    },
+    {
+      "clusters": 5,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "COMPONENT"
+    },
+    {
+      "clusters": 2,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "FEATURE"
+    },
+    {
+      "clusters": 8,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "ARTIFACT"
+    },
+    {
+      "clusters": 3,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "DEPENDENCY"
+    },
+    {
+      "clusters": 2,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:50:45Z",
+      "type": "DECISION"
+    },
+    {
+      "entity": "tool/growmos",
+      "kind": "profile",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "entity": "concept/living-knowledge-graph-methodology",
+      "kind": "profile",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "entity": "component/graphstore-store-py",
+      "kind": "remember",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "entity": "component/packet-builder-prompts-py",
+      "kind": "remember",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "entity": "component/graph-engine-graph-py",
+      "kind": "remember",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "kind": "link",
+      "relation": "r_c6d4e8696844",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "kind": "link",
+      "relation": "r_3c068163c973",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "kind": "link",
+      "relation": "r_3b6d37efba09",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "kind": "link",
+      "relation": "r_51b0f6496aa6",
+      "ts": "2026-08-17T11:51:11Z"
+    },
+    {
+      "clusters": 8,
+      "kind": "resolution",
+      "merged": 0,
+      "renamed": 0,
+      "ts": "2026-08-17T11:51:11Z",
+      "type": "COMPONENT"
+    }
+  ]
+}
