@@ -40,7 +40,7 @@ TOOLS = [
           {"source": {"type": "string"}, "predicate": {"type": "string"}, "target": {"type": "string"}, "provenance": {"type": "string"}}, ["source", "predicate", "target"]),
     _tool("growmos_journal", "Append a note to the shared journal (what changed and why).", {"text": {"type": "string"}, "author": {"type": "string"}}, ["text"]),
     _tool("growmos_check", "Fact-check claims (as 'A --[pred]--> B' lines or free text) against graph edges with provenance.", {"text": {"type": "string"}}, ["text"]),
-    _tool("growmos_next", "Get the next task packet (extraction/resolution/profile) to grow the graph. Produce the JSON it asks for, then call growmos_apply.", {}, []),
+    _tool("growmos_next", "Get the next task packet (extraction/resolution/profile/gold/review) to grow the graph. Produce the JSON it asks for, then call growmos_apply. force=true ignores the daily extraction cap.", {"force": {"type": "boolean"}}, []),
     _tool("growmos_apply", "Apply a completed packet. kind = extraction|resolution|profile; payload = the JSON object; plus source/chunk, type, or entity as printed in the packet.",
           {"kind": {"type": "string"}, "payload": {"type": "object"}, "source": {"type": "string"}, "chunk": {"type": "integer"}, "partial": {"type": "boolean"}, "type": {"type": "string"}, "entity": {"type": "string"}}, ["kind", "payload"]),
     _tool("growmos_status", "Graph statistics and health signals.", {}, []),
@@ -75,7 +75,7 @@ def call_tool(name: str, args: Dict[str, Any]) -> str:
     if name == "growmos_sample":
         return _run_cli(["sample"])
     if name == "growmos_next":
-        return _run_cli(["next"])
+        return _run_cli(["next"] + (["--force"] if a.get("force") else []))
     if name == "growmos_query":
         argv = ["query", a["question"], "--hops", str(int(a.get("hops", 2)))]
         for s in a.get("seeds") or []:

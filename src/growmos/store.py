@@ -85,7 +85,7 @@ class Store:
                 # agent instruction files are protocol, not knowledge
                 "AGENTS.md", "CLAUDE.md", "GEMINI.md", ".claude/**", ".cursor/**", ".codex/**", ".github/**",
             ],
-            "max_docs_per_run": 25,
+            "max_docs_per_run": 50,
             "max_entities_per_doc": 40,
             "chunk_chars": 6000,
             "profile_min_degree": 3,

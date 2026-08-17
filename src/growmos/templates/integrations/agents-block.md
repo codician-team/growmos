@@ -17,6 +17,7 @@ memory you read at the start of work and write to as you develop. Zero-config co
    profile / gold set / review) with the exact prompt, the JSON shape, and the `growmos apply …` command.
    Do the judgment work yourself, write the JSON, apply it. Repeat until `growmos next` says the graph is
    up to date — that loop covers everything, including the evaluation gold set and the periodic node review.
+   If it reports the daily extraction cap, run `growmos next --force` (the cap only guards unattended runs).
    Never invent facts not in the source; every relation must connect two extracted entities.
 5. **Before claiming facts about the repo in a summary/report** — `growmos check "<claim text>"` grounds
    your claims against edges with provenance (evaluator–optimizer loop).

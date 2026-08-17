@@ -153,13 +153,13 @@ growmos query "…" --auto
 ```
 
 Follows the playbook's model split (a fast model for high-volume extraction, a stronger model
-for judgment). Cap runs with `max_docs_per_run`. Prompt caching and batching are the natural
+for judgment). Cap runs with `max_docs_per_run` (default 50/day; `growmos next --force` or `growmos config max_docs_per_run 0` when you're driving a big backfill). Prompt caching and batching are the natural
 next optimizations for large corpora.
 
 ## Operational discipline (baked in)
 
 - **Sample the graph** — `growmos sample` (doctor warns after 7 days).
-- **Cap extraction volume** — `max_docs_per_run`, `max_entities_per_doc`.
+- **Cap extraction volume** — `max_docs_per_run` (50/day; a speed bump, not a wall: `growmos next --force`, or `growmos config max_docs_per_run 0` for a big backfill), `max_entities_per_doc`.
 - **Version the schema** — `growmos schema bump --note … --add-type …`.
 - **Never lose a name** — unmatched names get single-element clusters.
 - **Every edge has provenance** — and a corroboration count.

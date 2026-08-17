@@ -202,18 +202,22 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 0
 
 
-def _next_packet(st: Store) -> Optional[Dict[str, Any]]:
-    """Decide the next unit of judgment work. Order: extraction → resolution → profiles."""
+def _next_packet(st: Store, force: bool = False) -> Optional[Dict[str, Any]]:
+    """Decide the next unit of judgment work. Order: extraction → resolution → profiles → gold → review."""
     from .prompts import extraction_packet, resolution_blocks, resolution_packet, summarize_packet
-    cap = int(st.config.get("max_docs_per_run", 25))
+    cap = int(st.config.get("max_docs_per_run", 50))
     runs_today = sum(1 for r in st.state.get("runs", []) if r.get("kind") == "extraction" and r.get("ts", "").startswith(today()))
     pend = st.pending_sources()
-    if pend and runs_today < cap:
+    if pend and (force or cap <= 0 or runs_today < cap):
         text, meta = extraction_packet(st, pend[0]["id"])
         return {"kind": "extraction", "text": text, "meta": meta}
-    if pend and runs_today >= cap:
-        return {"kind": "capped", "text": f"Extraction cap reached for today ({cap}/day; see max_docs_per_run). "
-                                             f"{len(pend)} source(s) still pending.", "meta": {}}
+    if pend:
+        return {"kind": "capped", "text": (
+            f"⏸ Daily extraction cap reached ({runs_today}/{cap} today) — {len(pend)} source(s) still pending.\n"
+            f"The cap only guards against runaway unattended runs. To keep going now:\n"
+            f"    growmos next --force            # ignore the cap for this packet\n"
+            f"    growmos config max_docs_per_run 500   # raise it (0 = unlimited)\n"
+            f"Otherwise `growmos next` continues tomorrow, {cap} docs per day."), "meta": {"pending": len(pend)}}
     for etype in st.entity_types:
         blocks = resolution_blocks(st, etype)
         if blocks:
@@ -270,7 +274,7 @@ def cmd_next(args: argparse.Namespace) -> int:
     if args.scan:
         st.scan()
         st.save()
-    pkt = _next_packet(st)
+    pkt = _next_packet(st, force=args.force)
     if pkt is None:
         print("✓ graph is up to date: no pending sources, no provisional entities, hub profiles fresh.\n"
               "  Tip: `growmos scan` after editing docs, `growmos remember`/`link` while you work, `growmos sample` to review a node.")
@@ -682,6 +686,27 @@ def cmd_schema(args: argparse.Namespace) -> int:
     raise StoreError("schema action must be show | bump | presets")
 
 
+def cmd_config(args: argparse.Namespace) -> int:
+    st = _store(args)
+    if not args.key:
+        _print(st.config, True)
+        return 0
+    if args.value is None:
+        _print(st.config.get(args.key), True)
+        return 0
+    v: Any = args.value
+    if isinstance(st.config.get(args.key), bool):
+        v = str(v).lower() in ("1", "true", "yes", "on")
+    elif isinstance(st.config.get(args.key), int) or str(v).lstrip("-").isdigit():
+        v = int(v)
+    elif isinstance(st.config.get(args.key), list):
+        v = [x.strip() for x in str(v).split(",") if x.strip()]
+    st.config[args.key] = v
+    st.save()
+    print(f"✓ {args.key} = {v!r}")
+    return 0
+
+
 def cmd_compact(args: argparse.Namespace) -> int:
     st = _store(args)
     rep = st.compact()
@@ -857,6 +882,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("next", help="print the next task packet (extraction → resolution → profile)")
     sp.add_argument("--json", action="store_true")
     sp.add_argument("--scan", action="store_true", help="scan for changed docs first")
+    sp.add_argument("--force", action="store_true", help="ignore the daily extraction cap for this packet")
     sp.set_defaults(fn=cmd_next)
 
     sp = sub.add_parser("apply", help="ingest a completed packet's JSON")
@@ -970,6 +996,11 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("prompts", help="list | reset prompt templates")
     sp.add_argument("action", choices=["list", "reset"])
     sp.set_defaults(fn=cmd_prompts)
+
+    sp = sub.add_parser("config", help="get/set .growmos/config.json values (e.g. max_docs_per_run 500)")
+    sp.add_argument("key", nargs="?")
+    sp.add_argument("value", nargs="?")
+    sp.set_defaults(fn=cmd_config)
 
     sp = sub.add_parser("compact", help="rewrite store files, prune dangling rows")
     sp.set_defaults(fn=cmd_compact)
