@@ -152,6 +152,9 @@ MCP server — `growmos integrate mcp` writes this for you, or paste it yourself
 | Gemini CLI | `~/.gemini/settings.json` → `mcpServers.growmos` as above |
 | Grok CLI / others | their MCP config, same JSON |
 
+<!-- MCP Registry ownership marker -->
+`mcp-name: io.github.codician-team/growmos`
+
 Tools exposed: `growmos_context`, `growmos_query`, `growmos_entity`, `growmos_search`,
 `growmos_remember`, `growmos_link`, `growmos_journal`, `growmos_check`, `growmos_next`,
 `growmos_apply`, `growmos_status`, `growmos_sample`. Once registered, the agent calls them
