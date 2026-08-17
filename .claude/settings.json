@@ -4,7 +4,7 @@
       {
         "hooks": [
           {
-            "command": "growmos context --brief 2>/dev/null || true",
+            "command": "growmos hook session-start 2>/dev/null || true",
             "type": "command"
           }
         ],
@@ -15,7 +15,7 @@
       {
         "hooks": [
           {
-            "command": "growmos scan --quiet 2>/dev/null || true",
+            "command": "growmos hook stop 2>/dev/null || true",
             "type": "command"
           }
         ],

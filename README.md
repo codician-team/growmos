@@ -75,9 +75,17 @@ growmos init                 # creates .growmos/, detects your agent CLI, wires 
 growmos next                 # → first task packet (extraction of README.md)
 ```
 
-Then let your agent run the loop. In Claude Code / Codex / Grok / Cursor the instructions are
-already in place (`CLAUDE.md`, `AGENTS.md`, `.cursor/rules/…`) — just say
-*"grow the knowledge graph"* or *"what does the graph say about X?"*.
+From here it runs itself:
+
+- **Claude Code** (hooks): at session start the brief is injected and, if work is pending, the
+  agent is told to run the loop; at the end of a turn a `Stop` hook scans your docs and, if new
+  packets appeared, keeps the agent going until the graph is up to date and journaled. You never
+  have to ask.
+- **Codex / Grok / Cursor / Gemini** (no hooks): the same protocol lives in `AGENTS.md` /
+  `.cursor/rules` — "if the brief shows pending work, run the loop before you stop." Agents follow
+  it; you *can* still say *"grow the knowledge graph"* or *"what does the graph say about X?"*.
+- **Nobody at the keyboard:** git hooks queue changed docs after every commit, and `growmos ingest`
+  on cron/CI (headless mode) does the whole loop with an API key.
 
 Manually, the loop is:
 

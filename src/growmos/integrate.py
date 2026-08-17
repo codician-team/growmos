@@ -59,16 +59,21 @@ def _merge_hooks(settings: Dict[str, Any]) -> bool:
     hooks = settings.setdefault("hooks", {})
     changed = False
     wanted = {
-        "SessionStart": "growmos context --brief 2>/dev/null || true",
-        "Stop": "growmos scan --quiet 2>/dev/null || true",
+        "SessionStart": "growmos hook session-start 2>/dev/null || true",
+        "Stop": "growmos hook stop 2>/dev/null || true",
     }
     for event, cmd in wanted.items():
         arr = hooks.setdefault(event, [])
-        present = any(
-            isinstance(entry, dict) and any(
-                isinstance(h, dict) and "growmos" in str(h.get("command", "")) for h in entry.get("hooks", [])
-            ) for entry in arr
-        )
+        present = False
+        for entry in arr:
+            if not isinstance(entry, dict):
+                continue
+            for h in entry.get("hooks", []):
+                if isinstance(h, dict) and "growmos" in str(h.get("command", "")):
+                    present = True
+                    if h.get("command") != cmd:  # upgrade older growmos hook commands
+                        h["command"] = cmd
+                        changed = True
         if not present:
             arr.append({"matcher": "", "hooks": [{"type": "command", "command": cmd}]})
             changed = True
@@ -102,7 +107,7 @@ def integrate(root: Path, target: str, file: str = "") -> List[str]:
             settings = read_json(spath, {}) or {}
             if _merge_hooks(settings):
                 write_json(spath, settings)
-                out.append(".claude/settings.json: hooks added (SessionStart → context brief, Stop → scan)")
+                out.append(".claude/settings.json: hooks set (SessionStart → brief + pending-work nudge, Stop → scan + finish-the-loop)")
             else:
                 out.append(".claude/settings.json: hooks already present")
             out.append(f".mcp.json: {_merge_mcp(root)} (growmos MCP server)")

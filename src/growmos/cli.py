@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import random
 import sys
+from contextlib import redirect_stdout
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -829,6 +831,51 @@ def cmd_view(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_hook(args: argparse.Namespace) -> int:
+    """Claude Code hook entry points (read hook JSON on stdin, print output/decision).
+
+    session-start : print the brief; if work is pending, tell the agent to run the loop now.
+    stop          : scan for changed docs; if packets are pending and this is not already a
+                    hook-driven continuation, block the stop once with an instruction to finish
+                    the growmos loop (Claude Code honours {"decision":"block","reason":...}).
+    """
+    try:
+        payload = json.loads(sys.stdin.read() or "{}")
+    except json.JSONDecodeError:
+        payload = {}
+    try:
+        st = _store(args)
+    except StoreError:
+        return 0  # not a growmos repo — silent no-op
+    if args.event == "session-start":
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            cmd_context(argparse.Namespace(root=args.root, brief=True, budget=900))
+        pkt = _next_packet(st)
+        text = buf.getvalue()
+        if pkt and pkt["kind"] != "capped":
+            text += ("\n\n[growmos] There is pending graph work. Before or alongside the user's request, run "
+                     "`growmos next` and apply the packet it prints; repeat until it says 'up to date' "
+                     "(it is quick and does not need permission). Then `growmos journal` at session end.")
+        print(text)
+        return 0
+    if args.event == "stop":
+        st.scan()
+        st.save()
+        if payload.get("stop_hook_active"):
+            return 0  # already continuing because of us — never loop
+        pkt = _next_packet(st)
+        if pkt and pkt["kind"] != "capped":
+            d = Graph(st).diagnostics()
+            reason = (f"growmos: the knowledge graph has pending work ({d['pending_sources']} pending source(s), "
+                      f"{d['provisional']} provisional entit(ies); next packet: {pkt['kind']}). "
+                      "Run `growmos next`, apply the packet, and repeat until it reports 'up to date', "
+                      "then `growmos journal` a one-line summary of this session. Then you may stop.")
+            print(json.dumps({"decision": "block", "reason": reason}))
+        return 0
+    return 0
+
+
 def cmd_mcp(args: argparse.Namespace) -> int:
     from .mcp import serve
     serve()
@@ -1015,6 +1062,10 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--out", help="write HTML here instead of .growmos/graph.html")
     sp.add_argument("--no-open", action="store_true", help="just write the file")
     sp.set_defaults(fn=cmd_view)
+
+    sp = sub.add_parser("hook", help="agent-CLI hook entry points: session-start | stop (reads hook JSON on stdin)")
+    sp.add_argument("event", choices=["session-start", "stop"])
+    sp.set_defaults(fn=cmd_hook)
 
     sp = sub.add_parser("mcp", help="run the MCP stdio server (tools for any MCP-capable agent CLI)")
     sp.set_defaults(fn=cmd_mcp)

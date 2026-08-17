@@ -6,6 +6,8 @@ profiles, a journal). It is the shared world model that survives context windows
 memory you read at the start of work and write to as you develop. Zero-config commands:
 
 1. **Session start** — run `growmos context` (a compact brief: hubs, health, pending work, latest journal).
+   If it lists pending work, run the `growmos next` → apply loop (step 4) right away, without being asked —
+   it is quick, needs no permission, and is how the graph stays alive.
 2. **Before cross-cutting questions** ("what depends on X?", "why was Y decided?") — run
    `growmos query "<question>"`; answer from the returned subgraph and cite edge ids.
 3. **When you learn or decide something durable** (new component, architectural decision, ownership,
