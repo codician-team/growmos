@@ -42,6 +42,13 @@ no invented facts.
 **Query** — answer from the graph only, cite edges, flag gaps. On a private corpus only the
 grounded answer works at all.
 
+**Gold packet** — you are writing the reference answer for the eval loop: read the document, keep
+only genuinely central entities and (source,target) pairs, add what extraction missed, remove what
+is not stated. Precision first. Humans may later overwrite the file; say so is fine.
+
+**Review packet** — the periodic comprehension check: verify every edge of one node against the
+cited sources; fix what is wrong with `growmos link`/`remember`/`journal`, then report ok/issues.
+
 ## Applying results
 
 Write the JSON to the `out_file` named in the packet header (or pipe on stdin) and run the
@@ -51,6 +58,8 @@ printed command, e.g.
 growmos apply extraction .growmos/cache/extract_src_xxx_0.json --source src_xxx --chunk 0
 growmos apply resolution .growmos/cache/resolve_person_0.json --type PERSON
 growmos apply profile .growmos/cache/profile_x.json --entity "component/graph-store"
+growmos apply gold .growmos/cache/gold_src_xxx.json --source src_xxx
+growmos apply review .growmos/cache/review_x.json --entity "component/graph-store"
 ```
 
 The CLI validates against the schema, drops dangling relations, gives unmatched names a
