@@ -30,6 +30,7 @@ closing the circle). See [METHODOLOGY.md](METHODOLOGY.md) for the full methodolo
                                        evaluation loop: change prompt → growmos eval → watch F1 move
 ```
 
+<p align="center"><b>▶ <a href="https://codician-team.github.io/growmos/demo/growmos.html">Live demo — click around growmos's own graph</a></b> · <a href="https://codician-team.github.io/growmos/demo/apollo.html">Apollo corpus demo</a> · <a href="https://codician-team.github.io/growmos/">site</a></p>
 <p align="center"><img src="docs/assets/growmos-view.png" alt="growmos view — interactive graph explorer" width="900"></p>
 <p align="center"><code>growmos view</code> — after a few days of development, this is what lays in your graph: hubs sized by degree, colored by type, every edge with provenance, profiles on click.</p>
 
