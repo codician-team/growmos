@@ -248,7 +248,7 @@ class Store:
         else:
             digest = sha256_text(text or "")
         rec = self.sources.get(sid)
-        if rec and rec.get("sha256") == digest and rec.get("status") != "pending":
+        if rec and rec.get("sha256") == digest and rec.get("status") != "missing":
             return rec, False
         changed = True
         if rec is None:
