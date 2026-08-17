@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>growmos — a living knowledge graph that grows with your repo</title>
+<meta name="description" content="growmos: agent-native, zero-dependency knowledge graph for any repository. Plug & play with Claude Code, Codex, Grok, Cursor, Gemini and any MCP client. MIT, by Codician.">
+<meta property="og:title" content="growmos — a living knowledge graph that grows with your repo">
+<meta property="og:description" content="Shared, provenance-carrying memory for humans and AI agents. pip install growmos">
+<meta property="og:image" content="https://codician-team.github.io/growmos/assets/social-preview.png">
+<style>
+:root{--bg:#0b0f17;--panel:#111827;--line:#1f2937;--text:#e5e7eb;--muted:#9ca3af;--accent:#7dd3fc}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
+main{max-width:920px;margin:0 auto;padding:56px 20px 80px}
+h1{font-size:40px;margin:0 0 6px;letter-spacing:-.5px} .tag{color:var(--muted);font-size:18px;margin:0 0 28px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card h3{margin:0 0 6px;font-size:16px} .card p{margin:0;color:var(--muted);font-size:14px}
+img{max-width:100%;border-radius:12px;border:1px solid var(--line)}
+footer{color:var(--muted);font-size:13px;margin-top:40px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:30px}}
+</style></head><body><main>
+<h1>growmos</h1>
+<p class="tag">A living knowledge graph that grows with your repo — shared, provenance-carrying memory for humans and AI agents. Agent-native. Zero dependencies. MIT.</p>
+<pre>pip install growmos
+cd your-repo &amp;&amp; growmos init      # detects Claude Code / Codex / Cursor / Gemini and wires them
+growmos view                          # open the interactive explorer</pre>
+<div class="grid">
+  <a class="card" href="demo/growmos.html"><h3>Live demo → growmos's own graph</h3><p>The repository dogfoods itself: 47 nodes, 56 edges, hub profiles, edge provenance. Click any node.</p></a>
+  <a class="card" href="demo/apollo.html"><h3>Live demo → the Apollo corpus</h3><p>The Anthropic playbook's six-document example: "Edwin Aldrin" → "Buzz Aldrin", one connected component, density 1.58.</p></a>
+  <a class="card" href="https://github.com/codician-team/growmos"><h3>GitHub</h3><p>Source, docs, methodology, issues. MIT.</p></a>
+  <a class="card" href="https://pypi.org/project/growmos/"><h3>PyPI</h3><p><code>pip install growmos</code> · Python ≥ 3.9 · no dependencies.</p></a>
+</div>
+<a href="demo/growmos.html"><img src="assets/growmos-view.png" alt="growmos view screenshot"></a>
+<h2>How it works</h2>
+<p>Docs, ADRs, READMEs and sessions are <b>extracted</b> into typed entities and short-verb-phrase relations, <b>resolved</b> into canonical nodes ("Edwin Aldrin" → "Buzz Aldrin"), <b>assembled</b> with provenance and corroboration counts, and <b>queried</b> as k-hop subgraphs the agent must cite. The CLI does the deterministic work; the judgment work is handed to whatever agent you already run — Claude Code, Codex, Grok, Cursor, Gemini — as <i>task packets</i>. No API key needed. An evaluation loop (gold sets, F1, a 10-item readiness checklist) keeps it honest, automatically.</p>
+<p>Read the methodology: <a href="https://github.com/codician-team/growmos/blob/main/METHODOLOGY.md">METHODOLOGY.md</a>.</p>
+<footer>Built by <a href="https://codician.com">Codician</a>. Implements the knowledge-graph methodology of the Anthropic playbook; not affiliated with Anthropic.</footer>
+</main></body></html>

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>growmos · apollo</title>
+<style>
+  :root { --bg:#0b0f17; --panel:#111827; --line:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#7dd3fc; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--text); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; }
+  #top { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-items:center; gap:12px; padding:0 16px; background:linear-gradient(180deg,rgba(11,15,23,.98),rgba(11,15,23,.85)); border-bottom:1px solid var(--line); z-index:5; }
+  #top h1 { font-size:15px; font-weight:600; margin:0; letter-spacing:.2px; white-space:nowrap; }
+  #top h1 span { color:var(--muted); font-weight:400; }
+  #search { flex:0 0 260px; background:var(--panel); border:1px solid var(--line); color:var(--text); border-radius:8px; padding:7px 10px; outline:none; }
+  #search:focus { border-color:var(--accent); }
+  #stats { color:var(--muted); font-size:12px; margin-left:auto; white-space:nowrap; }
+  #legend { display:flex; gap:6px; flex-wrap:nowrap; overflow-x:auto; max-width:45vw; scrollbar-width:none; }
+  .chip { display:inline-flex; align-items:center; gap:6px; padding:3px 9px; border-radius:999px; border:1px solid var(--line); background:var(--panel); font-size:11px; cursor:pointer; user-select:none; }
+  .chip i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+  .chip.off { opacity:.35; }
+  canvas { position:fixed; inset:0; top:52px; cursor:grab; }
+  canvas.grabbing { cursor:grabbing; }
+  #card { position:fixed; top:64px; right:16px; width:380px; max-height:calc(100% - 80px); overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; display:none; z-index:6; box-shadow:0 20px 50px rgba(0,0,0,.5); }
+  #card h2 { margin:0 0 2px; font-size:16px; }
+  #card .type { color:var(--muted); font-size:12px; margin-bottom:8px; }
+  #card p { margin:6px 0; }
+  #card h3 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 6px; }
+  #card ul { margin:0; padding-left:16px; }
+  #card li { margin:3px 0; }
+  #card .prov { color:var(--muted); font-size:11px; }
+  #card a.node { color:var(--accent); cursor:pointer; text-decoration:none; }
+  #card .close { position:absolute; top:8px; right:12px; color:var(--muted); cursor:pointer; font-size:18px; }
+  #hint { position:fixed; left:16px; bottom:12px; color:var(--muted); font-size:11px; }
+  #card .stale { color:#fbbf24; font-size:11px; }
+</style>
+</head>
+<body>
+<div id="top">
+  <h1>growmos <span>· apollo</span></h1>
+  <input id="search" placeholder="search entities… (enter to focus)" autocomplete="off">
+  <div id="legend"></div>
+  <div id="stats"></div>
+</div>
+<canvas id="c"></canvas>
+<div id="card"><span class="close" onclick="closeCard()">×</span><div id="cardbody"></div></div>
+<div id="hint">drag to pan · wheel to zoom · drag nodes · click a node for its card · double-click background to reset</div>
+<script id="data" type="application/json">{"entities": [{"id": "artifact/saturn-v", "name": "Saturn V", "type": "ARTIFACT", "description": "NASA super heavy-lift launch vehicle of the Apollo program, flown 1967–1973.", "sources": ["src_bce94ec40a79", "src_d74296eb173d", "src_b92fa1cfa48b"], "provisional": false}, {"id": "artifact/vehicle-assembly-building", "name": "Vehicle Assembly Building", "type": "ARTIFACT", "description": "Building where Saturn V rockets were stacked.", "sources": ["src_d74296eb173d"], "provisional": false}, {"id": "event/apollo-11", "name": "Apollo 11", "type": "EVENT", "description": "First crewed mission to land on the Moon, July 1969.", "sources": ["src_6685504d6b32", "src_bce94ec40a79", "src_9efb1f773443", "src_d74296eb173d", "src_ddcfd41594ee"], "provisional": false}, {"id": "event/apollo-17", "name": "Apollo 17", "type": "EVENT", "description": "Last Apollo lunar mission, flown December 1972.", "sources": ["src_bce94ec40a79"], "provisional": false}, {"id": "event/apollo-program", "name": "Apollo program", "type": "EVENT", "description": "United States human spaceflight program run by NASA from 1961 to 1972 that landed astronauts on the Moon.", "sources": ["src_bce94ec40a79"], "provisional": false}, {"id": "event/gemini-12", "name": "Gemini 12", "type": "EVENT", "description": "1966 mission on which Aldrin set a spacewalk record.", "sources": ["src_9efb1f773443"], "provisional": false}, {"id": "event/gemini-8", "name": "Gemini 8", "type": "EVENT", "description": "1966 mission Armstrong commanded, first docking of two spacecraft.", "sources": ["src_ddcfd41594ee"], "provisional": false}, {"id": "location/kennedy-space-center", "name": "Kennedy Space Center", "type": "LOCATION", "description": "NASA launch complex on Merritt Island, Florida, established 1962, launch site of every crewed Apollo mission.", "sources": ["src_6685504d6b32", "src_bce94ec40a79", "src_b92fa1cfa48b", "src_d74296eb173d"], "provisional": false}, {"id": "location/launch-complex-39", "name": "Launch Complex 39", "type": "LOCATION", "description": "Pads 39A/39B built for the Saturn V; Apollo 11 lifted off from 39A.", "sources": ["src_d74296eb173d"], "provisional": false}, {"id": "location/marshall-space-flight-center", "name": "Marshall Space Flight Center", "type": "LOCATION", "description": "NASA center where the Saturn V was designed.", "sources": ["src_b92fa1cfa48b"], "provisional": false}, {"id": "location/merritt-island", "name": "Merritt Island", "type": "LOCATION", "description": "Florida island where the center is located.", "sources": ["src_d74296eb173d"], "provisional": false}, {"id": "location/moon", "name": "Moon", "type": "LOCATION", "description": "Where Apollo 11 landed on 20 July 1969.", "sources": ["src_6685504d6b32", "src_bce94ec40a79", "src_9efb1f773443"], "provisional": false}, {"id": "organization/mit", "name": "MIT", "type": "ORGANIZATION", "description": "Where Aldrin earned a doctorate in astronautics.", "sources": ["src_9efb1f773443"], "provisional": false}, {"id": "organization/nasa", "name": "NASA", "type": "ORGANIZATION", "description": "US space agency that ran the Apollo program.", "sources": ["src_bce94ec40a79", "src_9efb1f773443", "src_d74296eb173d", "src_b92fa1cfa48b"], "provisional": false}, {"id": "person/buzz-aldrin", "name": "Buzz Aldrin", "type": "PERSON", "description": "American astronaut (born 1930), lunar module pilot of Apollo 11, second person to walk on the Moon.", "sources": ["src_6685504d6b32", "src_9efb1f773443"], "provisional": false}, {"id": "person/michael-collins", "name": "Michael Collins", "type": "PERSON", "description": "Apollo 11 command module pilot who stayed in lunar orbit.", "sources": ["src_6685504d6b32"], "provisional": false}, {"id": "person/neil-alden-armstrong", "name": "Neil Alden Armstrong", "type": "PERSON", "description": "American astronaut (1930–2012), first person to walk on the Moon, commander of Apollo 11 and Gemini 8.", "sources": ["src_ddcfd41594ee", "src_6685504d6b32"], "provisional": false}, {"id": "person/president-kennedy", "name": "President Kennedy", "type": "PERSON", "description": "US president whose 1961 goal of a Moon landing before 1970 the Apollo program was dedicated to.", "sources": ["src_bce94ec40a79", "src_d74296eb173d"], "provisional": false}, {"id": "person/wernher-von-braun", "name": "Wernher von Braun", "type": "PERSON", "description": "Directed the design of the Saturn V at Marshall Space Flight Center.", "sources": ["src_b92fa1cfa48b"], "provisional": false}], "relations": [{"id": "r_0144d36d6db5", "source": "person/michael-collins", "target": "event/apollo-11", "predicate": "flew on", "sources": ["src_6685504d6b32"], "confidence": 1}, {"id": "r_0f60a55f3ef6", "source": "location/kennedy-space-center", "target": "location/merritt-island", "predicate": "located on", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_1d816bda367d", "source": "person/buzz-aldrin", "target": "location/moon", "predicate": "walked on", "sources": ["src_9efb1f773443"], "confidence": 1}, {"id": "r_300f89fd02b5", "source": "event/apollo-11", "target": "event/apollo-program", "predicate": "part of", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_3c6acba5d60a", "source": "person/neil-alden-armstrong", "target": "event/apollo-11", "predicate": "commanded", "sources": ["src_ddcfd41594ee", "src_6685504d6b32"], "confidence": 2}, {"id": "r_424223cab74b", "source": "person/buzz-aldrin", "target": "event/gemini-12", "predicate": "flew on", "sources": ["src_9efb1f773443"], "confidence": 1}, {"id": "r_446ec9fb9c92", "source": "location/launch-complex-39", "target": "location/kennedy-space-center", "predicate": "part of", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_4fa94bd30594", "source": "artifact/saturn-v", "target": "artifact/vehicle-assembly-building", "predicate": "stacked in", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_5d90509d524f", "source": "artifact/saturn-v", "target": "location/marshall-space-flight-center", "predicate": "designed at", "sources": ["src_b92fa1cfa48b"], "confidence": 1}, {"id": "r_6812b53354a7", "source": "event/apollo-program", "target": "location/moon", "predicate": "landed on", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_69fa29d7765a", "source": "event/apollo-17", "target": "event/apollo-program", "predicate": "part of", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_7b8b5779d23e", "source": "person/buzz-aldrin", "target": "organization/nasa", "predicate": "joined", "sources": ["src_9efb1f773443"], "confidence": 1}, {"id": "r_8342ce196db3", "source": "event/apollo-program", "target": "artifact/saturn-v", "predicate": "used", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_87671dcc4a1d", "source": "person/neil-alden-armstrong", "target": "location/moon", "predicate": "walked on", "sources": ["src_6685504d6b32"], "confidence": 1}, {"id": "r_89ae510dc5fd", "source": "organization/nasa", "target": "event/apollo-program", "predicate": "ran", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_91f96cce80d2", "source": "organization/nasa", "target": "location/kennedy-space-center", "predicate": "operates", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_97fd86a8e7b8", "source": "event/apollo-11", "target": "location/launch-complex-39", "predicate": "launched from", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_9f1a08e29075", "source": "event/apollo-program", "target": "person/president-kennedy", "predicate": "dedicated to goal of", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_bf3d5727e82a", "source": "location/launch-complex-39", "target": "artifact/saturn-v", "predicate": "built for", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_c96518aa8319", "source": "person/neil-alden-armstrong", "target": "event/gemini-8", "predicate": "commanded", "sources": ["src_ddcfd41594ee"], "confidence": 1}, {"id": "r_ca88014902e5", "source": "person/buzz-aldrin", "target": "organization/mit", "predicate": "studied at", "sources": ["src_9efb1f773443"], "confidence": 1}, {"id": "r_d564e59b9362", "source": "event/apollo-11", "target": "location/moon", "predicate": "landed on", "sources": ["src_6685504d6b32"], "confidence": 1}, {"id": "r_eab3f835b5a3", "source": "event/apollo-program", "target": "location/kennedy-space-center", "predicate": "launched from", "sources": ["src_bce94ec40a79"], "confidence": 1}, {"id": "r_ead90086a18e", "source": "artifact/saturn-v", "target": "location/kennedy-space-center", "predicate": "launched from", "sources": ["src_b92fa1cfa48b"], "confidence": 1}, {"id": "r_ec368b2d27c8", "source": "person/wernher-von-braun", "target": "artifact/saturn-v", "predicate": "designed", "sources": ["src_b92fa1cfa48b"], "confidence": 1}, {"id": "r_f55aba496a95", "source": "artifact/vehicle-assembly-building", "target": "location/kennedy-space-center", "predicate": "part of", "sources": ["src_d74296eb173d"], "confidence": 1}, {"id": "r_f7388063f51f", "source": "event/apollo-11", "target": "location/kennedy-space-center", "predicate": "launched from", "sources": ["src_6685504d6b32"], "confidence": 1}, {"id": "r_f7d7f6bbfd61", "source": "person/buzz-aldrin", "target": "event/apollo-11", "predicate": "flew on", "sources": ["src_6685504d6b32", "src_9efb1f773443"], "confidence": 2}, {"id": "r_fb28b55c554a", "source": "organization/nasa", "target": "artifact/saturn-v", "predicate": "developed", "sources": ["src_b92fa1cfa48b"], "confidence": 1}, {"id": "r_fd2b4a6567f7", "source": "location/kennedy-space-center", "target": "person/president-kennedy", "predicate": "named after", "sources": ["src_d74296eb173d"], "confidence": 1}], "profiles": {"artifact/saturn-v": {"entity": "artifact/saturn-v", "key_facts": ["stub"], "sources_hash": "f069e176e1aa", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "event/apollo-11": {"entity": "event/apollo-11", "key_facts": ["stub"], "sources_hash": "2f67fc44d80b", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "event/apollo-program": {"entity": "event/apollo-program", "key_facts": ["stub"], "sources_hash": "2e629965b576", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "location/kennedy-space-center": {"entity": "location/kennedy-space-center", "key_facts": ["stub"], "sources_hash": "2a0f2c65f972", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "location/launch-complex-39": {"entity": "location/launch-complex-39", "key_facts": ["stub"], "sources_hash": "647cb4e2f6d4", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "location/moon": {"entity": "location/moon", "key_facts": ["stub"], "sources_hash": "3ceb54abef64", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "organization/nasa": {"entity": "organization/nasa", "key_facts": ["stub"], "sources_hash": "be5bb77d3e42", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "person/buzz-aldrin": {"entity": "person/buzz-aldrin", "key_facts": ["stub"], "sources_hash": "a790bc0e2017", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}, "person/neil-alden-armstrong": {"entity": "person/neil-alden-armstrong", "key_facts": ["stub"], "sources_hash": "9f97c32e5aa7", "summary": "stub", "time_range": {"end": "unknown", "start": "unknown"}, "ts": "2026-08-17T11:57:39Z", "stale": false}}, "aliases": {"artifact/saturn-v": ["Saturn V"], "artifact/vehicle-assembly-building": ["Vehicle Assembly Building"], "event/apollo-11": ["Apollo 11"], "event/apollo-17": ["Apollo 17"], "event/apollo-program": ["Apollo program"], "event/gemini-12": ["Gemini 12"], "event/gemini-8": ["Gemini 8"], "location/kennedy-space-center": ["John F. Kennedy Space Center", "Kennedy Space Center"], "location/launch-complex-39": ["Launch Complex 39"], "location/marshall-space-flight-center": ["Marshall Space Flight Center"], "location/merritt-island": ["Merritt Island"], "location/moon": ["Moon"], "organization/mit": ["MIT"], "organization/nasa": ["NASA"], "person/buzz-aldrin": ["Buzz Aldrin", "Edwin Aldrin"], "person/michael-collins": ["Michael Collins"], "person/neil-alden-armstrong": ["Neil Alden Armstrong", "Neil Armstrong"], "person/president-kennedy": ["President Kennedy"], "person/wernher-von-braun": ["Wernher von Braun"]}, "sources": {"src_6685504d6b32": "docs/apollo-11.md", "src_9efb1f773443": "docs/buzz-aldrin.md", "src_b92fa1cfa48b": "docs/saturn-v.md", "src_bce94ec40a79": "docs/apollo-program.md", "src_d74296eb173d": "docs/kennedy-space-center.md", "src_ddcfd41594ee": "docs/neil-armstrong.md"}, "meta": {"components": 1, "density": 1.58, "schema_version": 1, "generated": "2026-08-17 12:52", "focus": ""}}</script>
+<script>
+(function(){
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const PALETTE = ['#7dd3fc','#f9a8d4','#86efac','#fcd34d','#c4b5fd','#fda4af','#5eead4','#fdba74','#a5b4fc','#bef264','#f0abfc','#67e8f9','#fca5a5','#d9f99d'];
+const types = [...new Set(DATA.entities.map(e=>e.type))].sort();
+const color = Object.fromEntries(types.map((t,i)=>[t,PALETTE[i%PALETTE.length]]));
+const hidden = new Set();
+
+// ---- graph model
+const nodes = DATA.entities.map(e=>({...e, x:0,y:0,vx:0,vy:0, deg:0}));
+const byId = Object.fromEntries(nodes.map(n=>[n.id,n]));
+const links = DATA.relations.filter(r=>byId[r.source]&&byId[r.target]).map(r=>({...r, s:byId[r.source], t:byId[r.target]}));
+links.forEach(l=>{l.s.deg++; l.t.deg++;});
+const maxDeg = Math.max(1,...nodes.map(n=>n.deg));
+const R = n => 6 + 18*Math.sqrt(n.deg/maxDeg);
+// initial layout: hubs near center, radial by degree
+nodes.forEach((n,i)=>{ const a=i*2.399963, r=80+ (1-n.deg/maxDeg)*Math.min(innerWidth,innerHeight)*0.35; n.x=Math.cos(a)*r; n.y=Math.sin(a)*r; });
+
+// ---- canvas + camera
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+let W,H,dpr; const cam={x:0,y:0,k:1};
+function resize(){ dpr=devicePixelRatio||1; W=innerWidth; H=innerHeight-52; cv.width=W*dpr; cv.height=H*dpr; cv.style.width=W+'px'; cv.style.height=H+'px'; }
+addEventListener('resize',resize); resize();
+const toScreen=(x,y)=>[(x-cam.x)*cam.k+W/2,(y-cam.y)*cam.k+H/2];
+const toWorld=(sx,sy)=>[(sx-W/2)/cam.k+cam.x,(sy-H/2)/cam.k+cam.y];
+
+// ---- force simulation (simple, good enough for a few thousand edges)
+let alpha=1, hover=null, selected=null, dragging=null;
+function step(){
+  const vis = nodes.filter(n=>!hidden.has(n.type));
+  const n=vis.length; if(!n) return;
+  // repulsion (O(n^2) with cutoff; fine up to ~1500 nodes)
+  for(let i=0;i<n;i++){ const a=vis[i]; for(let j=i+1;j<n;j++){ const b=vis[j]; let dx=b.x-a.x, dy=b.y-a.y; let d2=dx*dx+dy*dy+0.01; if(d2>250000) continue; const f=900/d2; dx*=f; dy*=f; a.vx-=dx; a.vy-=dy; b.vx+=dx; b.vy+=dy; } }
+  // springs
+  for(const l of links){ if(hidden.has(l.s.type)||hidden.has(l.t.type)) continue; const dx=l.t.x-l.s.x, dy=l.t.y-l.s.y, d=Math.sqrt(dx*dx+dy*dy)+0.01; const want=60+R(l.s)+R(l.t); const f=(d-want)*0.02; const fx=dx/d*f, fy=dy/d*f; l.s.vx+=fx; l.s.vy+=fy; l.t.vx-=fx; l.t.vy-=fy; }
+  // gravity + integrate
+  for(const a of vis){ if(a===dragging) {a.vx=a.vy=0; continue;} a.vx+=-a.x*0.006; a.vy+=-a.y*0.006; a.vx*=0.82; a.vy*=0.82; a.x+=a.vx*alpha; a.y+=a.vy*alpha; }
+  alpha=Math.max(0.05, alpha*0.995);
+}
+
+// ---- drawing
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  const focus = selected||hover; const nb = new Set(); if(focus){ nb.add(focus.id); links.forEach(l=>{ if(l.s===focus) nb.add(l.t.id); if(l.t===focus) nb.add(l.s.id); }); }
+  // edges
+  for(const l of links){ if(hidden.has(l.s.type)||hidden.has(l.t.type)) continue;
+    const [x1,y1]=toScreen(l.s.x,l.s.y), [x2,y2]=toScreen(l.t.x,l.t.y);
+    const lit = focus && (l.s===focus||l.t===focus);
+    ctx.strokeStyle = lit ? 'rgba(125,211,252,.9)' : (focus ? 'rgba(148,163,184,.08)' : 'rgba(148,163,184,.25)');
+    ctx.lineWidth = lit ? 1.6 : (0.6 + Math.min(l.confidence||1,4)*0.35);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    // arrow head
+    const ang=Math.atan2(y2-y1,x2-x1), rt=R(l.t)*cam.k+2, ax=x2-Math.cos(ang)*rt, ay=y2-Math.sin(ang)*rt;
+    ctx.fillStyle=ctx.strokeStyle; ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(ax-Math.cos(ang-0.5)*7, ay-Math.sin(ang-0.5)*7); ctx.lineTo(ax-Math.cos(ang+0.5)*7, ay-Math.sin(ang+0.5)*7); ctx.closePath(); ctx.fill();
+    if(lit && cam.k>0.6){ ctx.fillStyle='rgba(229,231,235,.9)'; ctx.font='11px sans-serif'; ctx.fillText(l.predicate,(x1+x2)/2+4,(y1+y2)/2-4); }
+  }
+  // nodes
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  for(const n of nodes){ if(hidden.has(n.type)) continue;
+    const [x,y]=toScreen(n.x,n.y), r=R(n)*cam.k;
+    const dim = (focus && !nb.has(n.id)) || (q && !n.name.toLowerCase().includes(q));
+    ctx.globalAlpha = dim ? 0.18 : 1;
+    ctx.fillStyle=color[n.type]; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    if(n===selected){ ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke(); }
+    if(r>5 || (n.deg>=2 && cam.k>0.45) || n===focus || nb.has(n.id) || (q&&!dim)){ ctx.fillStyle='rgba(229,231,235,.95)'; ctx.font=(n.deg>=maxDeg*0.5?'600 ':'')+Math.max(10,Math.min(14,10+r/2))+'px sans-serif'; ctx.fillText(n.name, x+r+4, y+4); }
+    ctx.globalAlpha=1;
+  }
+}
+function fit(pad){ const vis=nodes.filter(n=>!hidden.has(n.type)); if(!vis.length) return; let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(const n of vis){ x0=Math.min(x0,n.x); y0=Math.min(y0,n.y); x1=Math.max(x1,n.x); y1=Math.max(y1,n.y); } cam.x=(x0+x1)/2; cam.y=(y0+y1)/2; cam.k=Math.min(2.5, Math.max(0.2, Math.min(W/((x1-x0)+2*(pad||60)), H/((y1-y0)+2*(pad||60))))); }
+let frame=0; function loop(){ step(); if(frame<420 && frame%30===0) fit(); frame++; draw(); requestAnimationFrame(loop); } loop();
+window.fitView=fit;
+
+// ---- interaction
+let panStart=null, moved=false;
+function nodeAt(sx,sy){ let best=null,bd=1e9; for(const n of nodes){ if(hidden.has(n.type)) continue; const [x,y]=toScreen(n.x,n.y); const d=Math.hypot(sx-x,sy-y); if(d<R(n)*cam.k+4 && d<bd){best=n;bd=d;} } return best; }
+cv.addEventListener('mousedown',e=>{ const n=nodeAt(e.offsetX,e.offsetY); moved=false; if(n){dragging=n; alpha=0.6;} else {panStart={x:e.offsetX,y:e.offsetY,cx:cam.x,cy:cam.y}; cv.classList.add('grabbing');} });
+addEventListener('mousemove',e=>{ const rect=cv.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; if(dragging){ const [wx,wy]=toWorld(sx,sy); dragging.x=wx; dragging.y=wy; moved=true; } else if(panStart){ cam.x=panStart.cx-(sx-panStart.x)/cam.k; cam.y=panStart.cy-(sy-panStart.y)/cam.k; moved=true; } else { hover=nodeAt(sx,sy); cv.style.cursor=hover?'pointer':'grab'; } });
+addEventListener('mouseup',e=>{ if(dragging && !moved) select(dragging); dragging=null; panStart=null; cv.classList.remove('grabbing'); });
+cv.addEventListener('click',e=>{ if(!moved && !nodeAt(e.offsetX,e.offsetY)) { selected=null; closeCard(); } });
+cv.addEventListener('dblclick',()=>{ alpha=0.8; fit(); });
+cv.addEventListener('wheel',e=>{ e.preventDefault(); const [wx,wy]=toWorld(e.offsetX,e.offsetY); cam.k=Math.min(6,Math.max(0.15,cam.k*(e.deltaY<0?1.12:0.89))); const [nx,ny]=toWorld(e.offsetX,e.offsetY); cam.x+=wx-nx; cam.y+=wy-ny; },{passive:false});
+document.getElementById('search').addEventListener('keydown',e=>{ if(e.key==='Enter'){ const q=e.target.value.toLowerCase(); const n=nodes.find(n=>n.name.toLowerCase()===q)||nodes.filter(n=>n.name.toLowerCase().includes(q)).sort((a,b)=>b.deg-a.deg)[0]; if(n){ select(n); cam.x=n.x; cam.y=n.y; } } });
+
+// ---- legend
+const legend=document.getElementById('legend');
+types.forEach(t=>{ const c=document.createElement('span'); c.className='chip'; c.innerHTML=`<i style="background:${color[t]}"></i>${t} <span style="color:var(--muted)">${nodes.filter(n=>n.type===t).length}</span>`; c.onclick=()=>{ hidden.has(t)?hidden.delete(t):hidden.add(t); c.classList.toggle('off'); alpha=0.6; }; legend.appendChild(c); });
+document.getElementById('stats').textContent = `${nodes.length} nodes · ${links.length} edges · ${DATA.meta.components} component(s) · density ${DATA.meta.density} · schema v${DATA.meta.schema_version} · ${DATA.meta.generated}`;
+
+// ---- card
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+window.closeCard=()=>{ document.getElementById('card').style.display='none'; };
+window.selectId=id=>{ const n=byId[id]; if(n){ select(n); cam.x=n.x; cam.y=n.y; } };
+function select(n){ selected=n; const card=document.getElementById('card'), b=document.getElementById('cardbody');
+  const out=links.filter(l=>l.s===n), inc=links.filter(l=>l.t===n);
+  const prof=DATA.profiles[n.id];
+  let h=`<h2>${esc(n.name)}</h2><div class="type"><i class="chip" style="padding:1px 7px;border-color:${color[n.type]}">${n.type}</i> · degree ${n.deg} · ${(n.sources||[]).length} source(s)${n.provisional?' · <span class="stale">provisional</span>':''}</div>`;
+  if(n.description) h+=`<p>${esc(n.description)}</p>`;
+  if(prof){ h+=`<h3>Profile</h3>`; prof.summary.split(/\n\n+/).forEach(p=>h+=`<p>${esc(p)}</p>`); if(prof.key_facts?.length){ h+=`<ul>`+prof.key_facts.map(f=>`<li>${esc(f)}</li>`).join('')+`</ul>`; } if(prof.time_range) h+=`<p class="prov">${esc(prof.time_range.start)} → ${esc(prof.time_range.end)}</p>`; if(prof.stale) h+=`<p class="stale">profile is stale (source set changed)</p>`; }
+  const edge=(l,dir)=>`<li>${dir==='out'?'→':'←'} <b>${esc(l.predicate)}</b> <a class="node" onclick="selectId('${dir==='out'?l.t.id:l.s.id}')">${esc(dir==='out'?l.t.name:l.s.name)}</a><div class="prov">${esc(l.id)} · ×${l.confidence||1} · ${(l.sources||[]).map(s=>esc(DATA.sources[s]||s)).join(', ')}</div></li>`;
+  if(out.length){ h+=`<h3>Outgoing (${out.length})</h3><ul>`+out.map(l=>edge(l,'out')).join('')+`</ul>`; }
+  if(inc.length){ h+=`<h3>Incoming (${inc.length})</h3><ul>`+inc.map(l=>edge(l,'in')).join('')+`</ul>`; }
+  if((n.sources||[]).length){ h+=`<h3>Sources</h3><ul>`+n.sources.map(s=>`<li class="prov">${esc(DATA.sources[s]||s)}</li>`).join('')+`</ul>`; }
+  if(DATA.aliases[n.id]?.length>1){ h+=`<h3>Aliases</h3><p class="prov">${DATA.aliases[n.id].map(esc).join(', ')}</p>`; }
+  b.innerHTML=h; card.style.display='block'; }
+const qp=new URLSearchParams(location.search); const f0=qp.get('focus')||DATA.meta.focus; if(f0 && byId[f0]) setTimeout(()=>{ select(byId[f0]); },qp.has('focus')?2500:0);
+})();
+</script>
+</body>
+</html>

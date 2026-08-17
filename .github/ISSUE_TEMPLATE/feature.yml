@@ -1,0 +1,8 @@
+name: Feature request
+description: An idea to help the organism grow
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes: {label: The idea, description: "What would you like growmos to do, and in which workflow (agent CLI, headless, viewer, exports…)?"}
+    validations: {required: true}

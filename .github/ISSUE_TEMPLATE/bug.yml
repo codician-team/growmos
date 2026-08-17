@@ -1,0 +1,15 @@
+name: Bug report
+description: Something in growmos misbehaves
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes: {label: growmos version, description: "`growmos --version`", placeholder: "0.1.3"}
+    validations: {required: true}
+  - type: input
+    id: cli
+    attributes: {label: Agent CLI, placeholder: "Claude Code / Codex / Cursor / none (manual)"}
+  - type: textarea
+    id: what
+    attributes: {label: What happened, description: "Command you ran, what you expected, what you got. `growmos status` and `growmos doctor` output help."}
+    validations: {required: true}
