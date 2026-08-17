@@ -556,8 +556,7 @@ class Store:
     # ------------------------------------------------------------------ direct writes (agents)
     def remember(self, name: str, etype: str, description: str, source_ref: str) -> Tuple[str, bool]:
         """Agent/human writes a node directly (the 'shared memo' path). Provenance = source_ref."""
-        rec, _ = self.register_source(source_ref, text=source_ref, kind="note", title=source_ref)
-        rec["status"] = "note"
+        rec = self._note_source(source_ref)
         eid, created = self.get_or_create_entity(name, etype, description, rec["id"], provisional=True)
         self.entities[eid]["mentions"] = self.entities[eid].get("mentions", 0) + 1
         append_jsonl(self.p("mentions.jsonl"), {
@@ -570,8 +569,7 @@ class Store:
     def link(self, source: str, predicate: str, target: str, source_ref: str,
              types: Tuple[Optional[str], Optional[str]] = (None, None),
              when: Optional[Dict[str, str]] = None) -> Tuple[str, bool]:
-        rec, _ = self.register_source(source_ref, text=source_ref, kind="note", title=source_ref)
-        rec["status"] = "note"
+        rec = self._note_source(source_ref)
         s = self.resolve_name(source, types[0])
         t = self.resolve_name(target, types[1])
         if s is None:
@@ -582,6 +580,18 @@ class Store:
 
     def default_type(self) -> str:
         return "CONCEPT" if "CONCEPT" in self.entity_types else "ARTIFACT"
+
+    def _note_source(self, ref: str) -> Dict[str, Any]:
+        """Provenance for direct writes: reuse an existing (file) source untouched, else a note."""
+        sid = self._source_id(ref.replace("\\", "/") if "/" in ref or "\\" in ref else ref)
+        if sid in self.sources:
+            return self.sources[sid]
+        if (self.root / ref).is_file():
+            rec, _ = self.register_source(ref)
+            return rec
+        rec, _ = self.register_source(ref, text=ref, kind="note", title=ref)
+        rec["status"] = "note"
+        return rec
 
     def journal(self, text: str, author: str = "agent") -> None:
         entry = f"\n### {now_iso()} · {author}\n\n{text.strip()}\n"
