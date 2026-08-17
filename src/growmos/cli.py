@@ -191,7 +191,7 @@ def cmd_add(args: argparse.Namespace) -> int:
             p = Path(ref)
             if not p.exists():
                 raise StoreError(f"not found: {ref}")
-            rel = str(p.resolve().relative_to(st.root)) if p.resolve().is_relative_to(st.root) else None
+            rel = p.resolve().relative_to(st.root).as_posix() if p.resolve().is_relative_to(st.root) else None
             if rel is None:
                 text = p.read_text(encoding="utf-8", errors="replace")
                 rec, changed = st.register_source(str(p.resolve()), text=text, kind="text", title=p.name)

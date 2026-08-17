@@ -221,7 +221,7 @@ class Store:
                     found.add(p)
         out = []
         for p in sorted(found):
-            rel = str(p.relative_to(self.root))
+            rel = p.relative_to(self.root).as_posix()
             if any(fnmatch.fnmatch(rel, e) or fnmatch.fnmatch("./" + rel, e) for e in exc):
                 continue
             if rel.startswith(DIRNAME + "/"):
@@ -237,6 +237,8 @@ class Store:
         A changed content hash flips status back to 'pending' — this is the incremental
         update rule: extract only what changed (§IX.C).
         """
+        if kind == "file":
+            ref = ref.replace("\\", "/")
         sid = self._source_id(ref)
         if text is None and kind == "file":
             path = self.root / ref
@@ -283,7 +285,7 @@ class Store:
         report: Dict[str, List[str]] = {"new": [], "changed": [], "missing": []}
         seen: Set[str] = set()
         for path in self.iter_candidate_files():
-            rel = str(path.relative_to(self.root))
+            rel = path.relative_to(self.root).as_posix()
             sid = self._source_id(rel)
             existed = sid in self.sources
             seen.add(sid)
