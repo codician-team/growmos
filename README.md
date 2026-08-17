@@ -153,7 +153,7 @@ MCP server — `growmos integrate mcp` writes this for you, or paste it yourself
 | Grok CLI / others | their MCP config, same JSON |
 
 <!-- MCP Registry ownership marker -->
-`mcp-name: io.github.codician-team/growmos`
+`mcp-name: com.codician/growmos`
 
 Tools exposed: `growmos_context`, `growmos_query`, `growmos_entity`, `growmos_search`,
 `growmos_remember`, `growmos_link`, `growmos_journal`, `growmos_check`, `growmos_next`,

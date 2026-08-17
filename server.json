@@ -1,17 +1,28 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
-  "name": "io.github.codician-team/growmos",
-  "description": "Living knowledge graph for your repo: query with citations, remember/link facts, fact-check claims, grow the graph via task packets. Zero deps.",
-  "repository": {"url": "https://github.com/codician-team/growmos", "source": "github"},
-  "version": "0.1.4",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "com.codician/growmos",
+  "description": "Living knowledge graph for your repo: query with citations, remember/link facts, fact-check claims.",
+  "repository": {
+    "url": "https://github.com/codician-team/growmos",
+    "source": "github"
+  },
+  "version": "0.1.5",
   "packages": [
     {
-      "registry_type": "pypi",
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
       "identifier": "growmos",
-      "version": "0.1.4",
-      "transport": {"type": "stdio"},
-      "runtime_hint": "growmos",
-      "package_arguments": [{"type": "positional", "value": "mcp"}]
+      "version": "0.1.5",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeHint": "growmos",
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ]
     }
   ]
 }
