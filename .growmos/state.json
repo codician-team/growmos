@@ -1,7 +1,7 @@
 {
   "counters": {
     "extractions": 16,
-    "profiles": 9,
+    "profiles": 12,
     "queries": 0,
     "resolutions": 14
   },
@@ -10,7 +10,7 @@
     "docs": 2,
     "ts": "2026-08-17T11:51:25Z"
   },
-  "last_run": "2026-08-17T17:05:54Z",
+  "last_run": "2026-08-17T17:06:28Z",
   "last_sample": "2026-08-17T11:51:11Z",
   "last_sample_entity": "concept/agent-protocol",
   "open_packets": {},
@@ -329,6 +329,21 @@
       "entity": "component/graphstore-store-py",
       "kind": "profile",
       "ts": "2026-08-17T17:05:54Z"
+    },
+    {
+      "entity": "component/mcp-server",
+      "kind": "profile",
+      "ts": "2026-08-17T17:06:04Z"
+    },
+    {
+      "entity": "concept/extraction",
+      "kind": "profile",
+      "ts": "2026-08-17T17:06:12Z"
+    },
+    {
+      "entity": "organization/codician",
+      "kind": "profile",
+      "ts": "2026-08-17T17:06:28Z"
     }
   ]
 }

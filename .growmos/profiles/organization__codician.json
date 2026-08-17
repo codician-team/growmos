@@ -1,0 +1,14 @@
+{
+  "entity": "organization/codician",
+  "key_facts": [
+    "Develops and maintains growmos, MIT (README.md, CONTRIBUTING.md)",
+    "Owns codician.com, the DNS-verified MCP Registry namespace (docs/mcp-registry.md)"
+  ],
+  "sources_hash": "be02d94b0811",
+  "summary": "Codician (codician.com) is the organization that develops and maintains growmos under the MIT license, owns the codician.com domain that anchors the com.codician namespace on the MCP Registry, and hosts the project at github.com/codician-team.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:06:28Z"
+}

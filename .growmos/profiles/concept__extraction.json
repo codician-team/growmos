@@ -1,0 +1,15 @@
+{
+  "entity": "concept/extraction",
+  "key_facts": [
+    "Central entities only, grounded descriptions, short verb phrases (METHODOLOGY.md)",
+    "Produces provisional entities for unmatched names (METHODOLOGY.md)",
+    "Tuned by the evaluation loop (METHODOLOGY.md)"
+  ],
+  "sources_hash": "f77f8bc4e015",
+  "summary": "Extraction is the first judgment stage of the methodology: per document chunk, the agent extracts only central entities with one-sentence descriptions grounded in that document, plus short-verb-phrase relations that connect two extracted entities. Precision beats recall because a wrong entity spawns wrong edges. Names are resolved against the canonical set by exact match; unmatched names become provisional entities. The evaluation loop tunes the extraction prompt.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:06:12Z"
+}

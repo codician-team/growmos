@@ -1,0 +1,15 @@
+{
+  "entity": "component/mcp-server",
+  "key_facts": [
+    "Twelve tools over JSON-RPC stdio, no dependencies (README.md)",
+    "Registered via growmos integrate mcp or a mcpServers snippet (docs/agents.md)",
+    "Listed on the MCP Registry as com.codician/growmos (docs/mcp-registry.md)"
+  ],
+  "sources_hash": "295aa77a1806",
+  "summary": "The MCP server (growmos mcp) is a zero-dependency JSON-RPC stdio server that exposes the graph as twelve tools — context, query, entity, search, remember, link, journal, check, next, apply, status, sample — so any MCP-capable client (Claude Code, Codex, Cursor, Gemini, Grok) can use the graph without shelling out. It is registered by growmos integrate mcp (.mcp.json, .cursor/mcp.json) and listed on the official MCP Registry as com.codician/growmos.",
+  "time_range": {
+    "end": "ongoing",
+    "start": "2026"
+  },
+  "ts": "2026-08-17T17:06:04Z"
+}
