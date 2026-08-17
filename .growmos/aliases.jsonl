@@ -34,6 +34,7 @@
 {"alias": "Anthropic API", "entity": "dependency/anthropic-api", "type": "DEPENDENCY"}
 {"alias": "OpenAI-compatible API", "entity": "dependency/openai-compatible-api", "type": "DEPENDENCY"}
 {"alias": "xAI API", "entity": "dependency/xai-api", "type": "DEPENDENCY"}
+{"alias": "growmos view (view.html)", "entity": "feature/growmos-view-view-html", "type": "FEATURE"}
 {"alias": "Headless mode", "entity": "feature/headless-mode", "type": "FEATURE"}
 {"alias": "Presets", "entity": "feature/presets", "type": "FEATURE"}
 {"alias": "Codician", "entity": "organization/codician", "type": "ORGANIZATION"}

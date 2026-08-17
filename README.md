@@ -22,6 +22,9 @@ closing the circle). See [METHODOLOGY.md](METHODOLOGY.md) for the full methodolo
                                        evaluation loop: change prompt → growmos eval → watch F1 move
 ```
 
+<p align="center"><img src="docs/assets/growmos-view.png" alt="growmos view — interactive graph explorer" width="900"></p>
+<p align="center"><code>growmos view</code> — after a few days of development, this is what lays in your graph: hubs sized by degree, colored by type, every edge with provenance, profiles on click.</p>
+
 ## Why
 
 Multi-agent systems and long-running coding sessions share one weakness: memory dies with the
@@ -47,6 +50,10 @@ growmos makes that a **living organism inside your repo**:
   resolved), the 10-item `growmos doctor` checklist and the health signals (components, density,
   compression) all stay green on autopilot. Every gold file records who reviewed it
   (`agent` / `human`) — humans can overrule at any time, but never have to.
+- **It shows itself.** `growmos view` opens a self-contained, offline interactive explorer
+  (force layout, search, type filters, click a node for its profile, edges and provenance) —
+  no server, no dependencies. `growmos export --format html|json|dot|mermaid|cypher|sql` for
+  everything else.
 - **It is agent-native.** No API key needed: the CLI does the deterministic work, and hands the
   *judgment* work (extraction, resolution, summarization) to whatever agent you already run as
   a **task packet** — prompt + JSON shape + the exact `growmos apply …` command. Optional
@@ -84,6 +91,7 @@ growmos remember "Scheduler" --type COMPONENT --desc "Schedules jobs; depends on
 growmos link "Scheduler" "depends on" "Store"
 growmos journal "Moved Store to Postgres (ADR-001)."
 growmos check "(Alice Chen) --[owns]--> (Scheduler)"
+growmos view                                 # open the interactive explorer in your browser
 growmos status · growmos context · growmos doctor · growmos eval · growmos sample
 ```
 
@@ -126,8 +134,8 @@ to your CLI's MCP config.
   journal.md        the shared memo, append-only
 ```
 
-Plain JSONL: diff-able, merge-friendly, greppable, exportable (`growmos export --format
-json|dot|mermaid|cypher|sql`). Storage is an infrastructure decision, not a pipeline decision:
+Plain JSONL: diff-able, merge-friendly, greppable, viewable (`growmos view`) and exportable
+(`growmos export --format html|json|dot|mermaid|cypher|sql`). Storage is an infrastructure decision, not a pipeline decision:
 the same schema maps onto Neo4j or three Postgres tables.
 
 ## Presets

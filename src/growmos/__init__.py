@@ -3,4 +3,4 @@
 Developed by Codician (https://codician.com). MIT licensed.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

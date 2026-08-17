@@ -82,6 +82,13 @@ the resolver step (`growmos resolve` → apply) merge surface forms across worke
 `growmos query` and cites edges. Everything writes to the same JSONL files; commit and merge
 like code.
 
+## Seeing the graph
+
+`growmos view` writes `.growmos/graph.html` (self-contained, offline) and opens it: force layout
+sized by degree, colored by type, search, type filters, and a card per node with description,
+profile, edges (with edge ids, corroboration and provenance) and aliases. `--focus <entity>` opens
+on a node; `--out path.html` writes elsewhere (share it, embed it in CI artifacts).
+
 ## Packet anatomy
 
 ```

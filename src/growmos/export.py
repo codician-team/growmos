@@ -94,4 +94,38 @@ def to_sql(store: Store) -> str:
     return "\n".join(lines)
 
 
-EXPORTERS = {"json": to_json, "dot": to_dot, "mermaid": to_mermaid, "cypher": to_cypher, "sql": to_sql}
+def to_html(store: Store, focus: str = "") -> str:
+    """Self-contained interactive explorer (force layout, cards, search). No external assets."""
+    from pathlib import Path as _P
+    from .util import now_iso
+    g = Graph(store)
+    d = g.diagnostics()
+    profiles = {}
+    for eid in store.entities:
+        prof = store.get_profile(eid)
+        if prof:
+            prof = dict(prof)
+            prof["stale"] = store.profile_is_stale(eid)
+            profiles[eid] = prof
+    aliases: Dict[str, List[str]] = {}
+    for (a, t), eid in store.aliases.items():
+        aliases.setdefault(eid, []).append(store._alias_display.get((a, t), a))
+    data = {
+        "entities": [{"id": e["id"], "name": e["name"], "type": e["type"], "description": e.get("description", ""),
+                      "sources": e.get("sources", []), "provisional": bool(e.get("provisional"))}
+                     for e in store.entities.values()],
+        "relations": [{"id": r["id"], "source": r["source"], "target": r["target"], "predicate": r["predicate"],
+                       "sources": r.get("sources", []), "confidence": r.get("confidence", 1)}
+                      for r in store.relations.values()],
+        "profiles": profiles,
+        "aliases": {k: sorted(set(v)) for k, v in aliases.items()},
+        "sources": {sid: rec.get("ref", sid) for sid, rec in store.sources.items()},
+        "meta": {"components": d["components"], "density": d["density"], "schema_version": d["schema_version"],
+                 "generated": now_iso()[:16].replace("T", " "), "focus": focus},
+    }
+    tpl = (_P(__file__).parent / "templates" / "view.html").read_text(encoding="utf-8")
+    payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return tpl.replace("__TITLE__", store.root.name).replace("__DATA__", payload)
+
+
+EXPORTERS = {"json": to_json, "html": to_html, "dot": to_dot, "mermaid": to_mermaid, "cypher": to_cypher, "sql": to_sql}

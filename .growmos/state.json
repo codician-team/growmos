@@ -10,7 +10,7 @@
     "docs": 2,
     "ts": "2026-08-17T11:51:25Z"
   },
-  "last_run": "2026-08-17T11:51:11Z",
+  "last_run": "2026-08-17T12:27:04Z",
   "last_sample": "2026-08-17T11:51:11Z",
   "last_sample_entity": "concept/agent-protocol",
   "open_packets": {},
@@ -181,6 +181,16 @@
       "renamed": 0,
       "ts": "2026-08-17T11:51:11Z",
       "type": "COMPONENT"
+    },
+    {
+      "entity": "feature/growmos-view-view-html",
+      "kind": "remember",
+      "ts": "2026-08-17T12:27:04Z"
+    },
+    {
+      "kind": "link",
+      "relation": "r_455737c6171f",
+      "ts": "2026-08-17T12:27:04Z"
     }
   ]
 }

@@ -787,6 +787,23 @@ def cmd_ingest(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_view(args: argparse.Namespace) -> int:
+    """Render the interactive explorer to .growmos/graph.html and open it."""
+    from .export import to_html
+    import webbrowser
+    st = _store(args)
+    focus = ""
+    if args.focus:
+        focus = st.resolve_name(args.focus) or (args.focus if args.focus in st.entities else "")
+    out = Path(args.out) if args.out else st.p("graph.html")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(to_html(st, focus=focus), encoding="utf-8")
+    print(f"✓ wrote {out}  ({len(st.entities)} nodes, {len(st.relations)} edges)")
+    if not args.no_open:
+        webbrowser.open(out.resolve().as_uri())
+    return 0
+
+
 def cmd_mcp(args: argparse.Namespace) -> int:
     from .mcp import serve
     serve()
@@ -938,7 +955,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--strict", action="store_true", help="exit 1 unless all green")
     sp.set_defaults(fn=cmd_doctor)
 
-    sp = sub.add_parser("export", help="export graph: json|dot|mermaid|cypher|sql")
+    sp = sub.add_parser("export", help="export graph: json|html|dot|mermaid|cypher|sql")
     sp.add_argument("--format", default="json")
     sp.add_argument("--out")
     sp.set_defaults(fn=cmd_export)
@@ -961,6 +978,12 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--limit", type=int, default=25)
     sp.add_argument("--scan", action="store_true")
     sp.set_defaults(fn=cmd_ingest)
+
+    sp = sub.add_parser("view", help="open an interactive visual explorer of the graph in your browser")
+    sp.add_argument("--focus", help="entity to select on open")
+    sp.add_argument("--out", help="write HTML here instead of .growmos/graph.html")
+    sp.add_argument("--no-open", action="store_true", help="just write the file")
+    sp.set_defaults(fn=cmd_view)
 
     sp = sub.add_parser("mcp", help="run the MCP stdio server (tools for any MCP-capable agent CLI)")
     sp.set_defaults(fn=cmd_mcp)

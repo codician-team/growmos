@@ -186,6 +186,11 @@ class ApolloFixture(unittest.TestCase):
             out = fn(self.st)
             self.assertTrue(out.strip(), name)
         self.assertIn("MERGE (n:PERSON", EXPORTERS["cypher"](self.st))
+        html = EXPORTERS["html"](self.st)
+        self.assertIn("Buzz Aldrin", html)
+        self.assertNotIn("__DATA__", html)
+        out = run_cli("--root", str(self.tmp), "view", "--no-open")
+        self.assertIn("graph.html", out)
         self.assertIn("CREATE TABLE IF NOT EXISTS entities", EXPORTERS["sql"](self.st))
 
     def test_cli_status_context_show(self):

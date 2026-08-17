@@ -127,7 +127,7 @@ class Store:
             )
         gi = st.p(".gitignore")
         if not gi.exists():
-            gi.write_text("*.tmp\ncache/\n", encoding="utf-8")
+            gi.write_text("*.tmp\ncache/\ngraph.html\n", encoding="utf-8")
         st.save()
         return st
 
